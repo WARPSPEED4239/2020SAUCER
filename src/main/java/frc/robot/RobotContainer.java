@@ -1,7 +1,17 @@
 package frc.robot;
 
+import java.util.Arrays;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.DrivetrainShifting;
@@ -19,18 +29,16 @@ import frc.robot.subsystems.Turret;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final Climber m_climber = new Climber();
-  private final Drivetrain m_drivetrain = new Drivetrain();
-  private final DrivetrainShifting m_drivetrainShifting = new DrivetrainShifting();
-  private final Feeder m_feeder = new Feeder();
-  private final Intake m_intake = new Intake();
-  private final PanelSpinner m_panelSpinner = new PanelSpinner();
-  private final Shooter m_shooter = new Shooter();
-  private final Turret m_turret = new Turret();
+  private final Climber mClimber = new Climber();
+  private final Drivetrain mDrivetrain = new Drivetrain();
+  private final DrivetrainShifting mDrivetrainShifting = new DrivetrainShifting();
+  private final Feeder mFeeder = new Feeder();
+  private final Intake mIntake = new Intake();
+  private final PanelSpinner mPanelSpinner = new PanelSpinner();
+  private final Shooter mShooter = new Shooter();
+  private final Turret mTurret = new Turret();
 
   //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-
-
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -56,7 +64,25 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    TrajectoryConfig config = new TrajectoryConfig(mDrivetrain.getMaxVelocityMetersPerSecond(), mDrivetrain.getMaxAcellMetersPerSecondPerSecond());
+
+    config.setKinematics(mDrivetrain.getKinematics());
+
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(Arrays.asList(new Pose2d(), new Pose2d(1.0, 0, new Rotation2d())), config);
+
+    RamseteCommand command = new RamseteCommand(
+      trajectory, 
+      mDrivetrain::getPose, 
+      new RamseteController(2.0, 0.7), 
+      mDrivetrain.getFeedForward(), 
+      mDrivetrain.getKinematics(), 
+      mDrivetrain::getSpeeds, 
+      mDrivetrain.getLeftPIDController(), 
+      mDrivetrain.getRightPIDController(), 
+      mDrivetrain::setOutput, 
+      mDrivetrain
+      );
+    
+    return command;
   }
 }
