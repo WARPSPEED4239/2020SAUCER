@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 
 public class DrivetrainArcadeDrive extends CommandBase {
@@ -14,8 +15,8 @@ public class DrivetrainArcadeDrive extends CommandBase {
   }
 
   @Override
-  public void execute() { //COPY PASTE FROM LAST YEAR'S CODE
-    double move = -Robot.m_oi.xbox.getTriggerAxis(Hand.kRight) + Robot.m_oi.xbox.getTriggerAxis(Hand.kLeft);
+  public void execute() { //COPY PASTE FROM LAST YEAR'S CODE //TODO HOW DO I CALL RobotContainer.getXbox?
+    double move = -RobotContainer.m_oi.xbox.getTriggerAxis(Hand.kRight) + Robot.m_oi.xbox.getTriggerAxis(Hand.kLeft);
     double rotate = -(.533333 * Math.pow(Robot.m_oi.xbox.getX(Hand.kLeft), 3) + .466666 *  Robot.m_oi.xbox.getX(Hand.kLeft));
 
     if (rotate > 0.85){

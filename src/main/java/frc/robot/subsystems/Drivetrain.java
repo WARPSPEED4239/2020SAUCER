@@ -28,7 +28,7 @@ public class Drivetrain extends SubsystemBase {
   private final double WHEEL_DIAMETER = 6.0;
   private final double GEARBOX_RATIO = 7.08;
   private final int ENCODER_TICKS_PER_REV = 2048;
-  private final double ENCODER_EDGES_PER_REV = 0.0; //TODO FIND THIS VALUE
+  private final double ENCODER_EDGES_PER_REV = 0.0; //TODO FIND THIS VALUE FOR frc-characterization drive new
 
   private final double kS = 0.268; //TODO TUNE THESE WITH frc-characterization drive new
   private final double kV = 1.89;
@@ -36,7 +36,6 @@ public class Drivetrain extends SubsystemBase {
   private final double kP = 9.95;
   private final double kI = 0.0;
   private final double kD = 0.0;
-
   private final double maxVelocityMetersPerSecond = Units.feetToMeters(19.0);
   private final double maxAcellMetersPerSecondPerSecond = Units.feetToMeters(6.0);
 
@@ -51,7 +50,7 @@ public class Drivetrain extends SubsystemBase {
 
   private DifferentialDrive drive = new DifferentialDrive(leftMotor1, rightMotor1);
   private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(TRACK_WIDTH_METERS); 
-  private DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(-getIMUYaw())); //TODO REVIEW: Could not pass in kinematics as an argument
+  private DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(-getIMUYaw())); //TODO REVIEW: Could not pass in kinematics as an argument like in tutorial
 
   private Pose2d pose;
   private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);
@@ -112,7 +111,7 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    pose = odometry.update(Rotation2d.fromDegrees(-getIMUYaw()), getLeftDistanceMeters(), getRightDistanceMeters());
+    pose = odometry.update(Rotation2d.fromDegrees(-getIMUYaw()), getLeftDistanceMeters(), getRightDistanceMeters()); //TODO Could not pass in getSpeeds like in video
   }
 
   public void arcadeDrive(double move, double rotate) {
@@ -176,7 +175,7 @@ public class Drivetrain extends SubsystemBase {
 
   public DifferentialDriveWheelSpeeds getSpeeds() {
     return new DifferentialDriveWheelSpeeds(
-      leftMotor1.getSelectedSensorVelocity() * 10.0 / ENCODER_TICKS_PER_REV * GEARBOX_RATIO * Math.PI * Units.inchesToMeters(WHEEL_DIAMETER),
+      leftMotor1.getSelectedSensorVelocity() * 10.0 / ENCODER_TICKS_PER_REV * GEARBOX_RATIO * Math.PI * Units.inchesToMeters(WHEEL_DIAMETER), //TODO Review this math, converting from Counts per .1 secs to Meters/sec
       rightMotor1.getSelectedSensorVelocity() * 10.0 / ENCODER_TICKS_PER_REV * GEARBOX_RATIO * Math.PI * Units.inchesToMeters(WHEEL_DIAMETER)
       );
   }
