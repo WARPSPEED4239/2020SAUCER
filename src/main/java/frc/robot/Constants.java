@@ -7,17 +7,33 @@ public final class Constants {
                             DRIVETRAIN_RIGHT_MOTOR_ONE = 4,   //PDP #15
                             DRIVETRAIN_RIGHT_MOTOR_TWO = 5,   //PDP #14
                             DRIVETRAIN_RIGHT_MOTOR_THREE = 6, //PDP #13
+                            
+                            CLIMBER_MOTOR = 1,                //PDP #X //TalonSRX
+                            FEEDER_MOTOR = 2,                 //PDP #X
+                            HOPPER_MOTOR = 3,                 //PDP #X
+                            INTAKE_MOTORS = 4,                //PDP #X
+                            PANNEL_SPINNER_MOTOR = 5,         //PDP #X
+                            SHOOTER_MOTOR_TOP = 6,            //PDP #X
+                            SHOOTER_MOTOR_BOTTOM = 7,         //PDP #X
+                            TURRET_MOTOR = 8,                 //PDP #X
 
-                            DRIVETRAIN_LEFT_ENCODER = 1,      //CANCoders
-                            DRIVETRAIN_RIGHT_ENCODER = 2,
+                            ELEVATOR_MOTOR = 1;               //PDP #X //SparkMAX
 
-                            PIGEON_IMU = 1;                   //PIGEON IMU
+    public static final int SHOOTER_LEFT_SERVO = 0,           //PWM
+                            SHOOTER_RIGHT_SERVO = 1,
 
+                            PRESSURE_SENSOR = 0,              //Analog In
+
+                            PIGEON_IMU = 1;                   //Pigeon IMU
     
     public static final int DRIVETRAIN_SHIFTING_SOLENOID_FORWARD = 0, //PCM
-                            DRIVETRAIN_SHIFTING_SOLENOID_REVERSE = 1;
+                            DRIVETRAIN_SHIFTING_SOLENOID_REVERSE = 1,
+                            FEEDER_SOLENOID_FORWARD = 2,
+                            FEEDER_SOLENOID_REVERSE = 3,
+                            INTAKE_SOLENOID_FORWARD = 4,
+                            INTAKE_SOLENOID_REVERSE = 5,
+                            PANNEL_SPINNER_SOLENOID_FORWARD = 6,
+                            PANNEL_SPINNER_SOLENOID_REVERSE = 7,
 
-    public static int pressueSensor = 0; //Analog In
-
-    public static int compressor = 0; //Compressor
+                            COMPRESSOR = 0;                           //Compressor
 }

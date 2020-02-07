@@ -1,12 +1,17 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 
 public class DrivetrainArcadeDrive extends CommandBase {
+  private final Drivetrain mDrivetrain;
+  private final XboxController mController;
   
-  public DrivetrainArcadeDrive(Drivetrain mDrivetrain) { //TODO IDK WHAT I AM DOIG HERE
+  public DrivetrainArcadeDrive(Drivetrain drivetrain, XboxController controller) {
+    mDrivetrain = drivetrain;
+    mController = controller;
     addRequirements(mDrivetrain);
   }
 
@@ -15,9 +20,9 @@ public class DrivetrainArcadeDrive extends CommandBase {
   }
 
   @Override
-  public void execute() { //COPY PASTE FROM LAST YEAR'S CODE //TODO HOW DO I CALL RobotContainer.getXbox?
-    double move = -RobotContainer.m_oi.xbox.getTriggerAxis(Hand.kRight) + Robot.m_oi.xbox.getTriggerAxis(Hand.kLeft);
-    double rotate = -(.533333 * Math.pow(Robot.m_oi.xbox.getX(Hand.kLeft), 3) + .466666 *  Robot.m_oi.xbox.getX(Hand.kLeft));
+  public void execute() {
+    double move = -mController.getTriggerAxis(Hand.kRight) + mController.getTriggerAxis(Hand.kLeft);
+    double rotate = -(.533333 * Math.pow(mController.getX(Hand.kLeft), 3) + .466666 *  mController.getX(Hand.kLeft));
 
     if (rotate > 0.85){
       rotate = 0.85;
@@ -25,8 +30,16 @@ public class DrivetrainArcadeDrive extends CommandBase {
     else if (rotate < -0.85) {
       rotate = -0.85;
     }
+
+    if (mController.getBButton()) {
+      mDrivetrain.setHighGear();
+    }
+
+    if (mController.getAButton()) {
+      mDrivetrain.setLowGear();
+    }
     
-    mDrivetrain.arcadeDrive(move, rotate); //TODO WHY CAN'T I REFERENCE Drivetrain.java?
+    mDrivetrain.arcadeDrive(move, rotate);
   }
 
   @Override

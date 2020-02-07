@@ -18,8 +18,8 @@ public class PneumaticController { //TODO IMPLMENT THIS IF NEEDED
     }
 
     public static PneumaticController create() {
-        Compressor compressor = new Compressor(Constants.compressor);
-        AnalogInput pressureSensor = new AnalogInput(Constants.pressueSensor);
+        Compressor compressor = new Compressor(Constants.COMPRESSOR);
+        AnalogInput pressureSensor = new AnalogInput(Constants.PRESSURE_SENSOR);
 
         return new PneumaticController(compressor, pressureSensor);
     }

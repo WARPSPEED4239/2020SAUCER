@@ -6,6 +6,8 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -28,7 +30,6 @@ public class Drivetrain extends SubsystemBase {
   private final double WHEEL_DIAMETER = 6.0;
   private final double GEARBOX_RATIO = 7.08;
   private final int ENCODER_TICKS_PER_REV = 2048;
-  private final double ENCODER_EDGES_PER_REV = 0.0; //TODO FIND THIS VALUE FOR frc-characterization drive new
 
   private final double kS = 0.268; //TODO TUNE THESE WITH frc-characterization drive new
   private final double kV = 1.89;
@@ -46,6 +47,7 @@ public class Drivetrain extends SubsystemBase {
   private WPI_TalonFX rightMotor2 = new WPI_TalonFX(Constants.DRIVETRAIN_RIGHT_MOTOR_TWO);
   private WPI_TalonFX rightMotor3 = new WPI_TalonFX(Constants.DRIVETRAIN_RIGHT_MOTOR_THREE);
   
+  private DoubleSolenoid shifter = new DoubleSolenoid(Constants.DRIVETRAIN_SHIFTING_SOLENOID_FORWARD, Constants.DRIVETRAIN_SHIFTING_SOLENOID_REVERSE);
   private PigeonIMU IMU = new PigeonIMU(Constants.PIGEON_IMU);
 
   private DifferentialDrive drive = new DifferentialDrive(leftMotor1, rightMotor1);
@@ -108,7 +110,7 @@ public class Drivetrain extends SubsystemBase {
     leftMotor1.setSensorPhase(false);
     rightMotor1.setSensorPhase(true);
   }
-
+  
   @Override
   public void periodic() {
     pose = odometry.update(Rotation2d.fromDegrees(-getIMUYaw()), getLeftDistanceMeters(), getRightDistanceMeters()); //TODO Could not pass in getSpeeds like in video
@@ -125,6 +127,14 @@ public class Drivetrain extends SubsystemBase {
       rotate = 0.0;
     
     drive.arcadeDrive(move, rotate);
+  }
+
+  public void setHighGear() {
+    shifter.set(Value.kForward);
+  }
+
+  public void setLowGear() {
+    shifter.set(Value.kReverse);
   }
 
   public void resetEncoders() {
