@@ -1,17 +1,19 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Turret extends SubsystemBase {
-  /**
-   * Creates a new Turret.
-   */
+ 
+  private WPI_TalonSRX motor = new WPI_TalonSRX(Constants.TURRET_MOTOR);
+  
   public Turret() {
 
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
   }
 }

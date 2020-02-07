@@ -19,6 +19,7 @@ import frc.robot.commands.DrivetrainArcadeDrive;
 import frc.robot.commands.ElevatorSetPercentOutput;
 import frc.robot.commands.IntakeMotorsSetPercentOutput;
 import frc.robot.commands.IntakePistonsSetState;
+import frc.robot.commands.RampSetState;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
@@ -57,6 +58,7 @@ public class RobotContainer {
 	private final ElevatorSetPercentOutput mElevatorSetPercentOutput = new ElevatorSetPercentOutput(mElevator, 0.0);
 	private final IntakeMotorsSetPercentOutput mIntakeSetPercentOutput = new IntakeMotorsSetPercentOutput(mIntakeMotors, 0.0);
 	private final IntakePistonsSetState mIntakePistonsSetState = new IntakePistonsSetState(mIntakePistons, true);
+	private final RampSetState mRampSetState = new RampSetState(mRamp, false);
 
 	public RobotContainer() {
 
@@ -65,6 +67,7 @@ public class RobotContainer {
 		CommandScheduler.getInstance().setDefaultCommand(mElevator, mElevatorSetPercentOutput);
 		CommandScheduler.getInstance().setDefaultCommand(mIntakeMotors, mIntakeSetPercentOutput);
 		CommandScheduler.getInstance().setDefaultCommand(mIntakePistons, mIntakePistonsSetState);
+		CommandScheduler.getInstance().setDefaultCommand(mRamp, mRampSetState);
 
 		configureButtonBindings();
 	}

@@ -28,12 +28,12 @@ public final class Constants {
     
     public static final int DRIVETRAIN_SHIFTING_SOLENOID_FORWARD = 0, //PCM
                             DRIVETRAIN_SHIFTING_SOLENOID_REVERSE = 1,
-                            FEEDER_SOLENOID_FORWARD = 2,
-                            FEEDER_SOLENOID_REVERSE = 3,
-                            INTAKE_SOLENOID_FORWARD = 4,
-                            INTAKE_SOLENOID_REVERSE = 5,
-                            PANNEL_SPINNER_SOLENOID_FORWARD = 6,
-                            PANNEL_SPINNER_SOLENOID_REVERSE = 7,
+                            INTAKE_SOLENOID_FORWARD = 2,
+                            INTAKE_SOLENOID_REVERSE = 3,
+                            PANNEL_SPINNER_SOLENOID_FORWARD = 4,
+                            PANNEL_SPINNER_SOLENOID_REVERSE = 5,
+                            RAMP_SOLENOID_FORWARD = 6,
+                            RAMP_SOLENOID_REVERSE = 7,
 
                             COMPRESSOR = 0;                           //Compressor
 }

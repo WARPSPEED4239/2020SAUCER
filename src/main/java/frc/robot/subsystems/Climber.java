@@ -14,12 +14,9 @@ public class Climber extends SubsystemBase {
   
   public Climber() {
     motor.restoreFactoryDefaults();
-
     motor.setInverted(false);
     motor.setIdleMode(IdleMode.kBrake);
-
     motor.setSmartCurrentLimit(CURRENT_LIMIT);
-
     motor.burnFlash();
   }
 

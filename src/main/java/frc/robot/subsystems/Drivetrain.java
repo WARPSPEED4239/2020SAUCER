@@ -74,9 +74,6 @@ public class Drivetrain extends SubsystemBase {
     rightMotor1.setInverted(false);
     rightMotor2.setInverted(false);
     rightMotor3.setInverted(false);
-
-    leftMotor1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-    rightMotor1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
   
     leftMotor1.setNeutralMode(NeutralMode.Brake);
     leftMotor2.setNeutralMode(NeutralMode.Brake);

@@ -10,14 +10,13 @@ public class IntakePistons extends SubsystemBase {
   private DoubleSolenoid pistons = new DoubleSolenoid(Constants.INTAKE_SOLENOID_FORWARD, Constants.INTAKE_SOLENOID_REVERSE);
 
   public IntakePistons() {
-
   }
 
   @Override
   public void periodic() {
   }
 
-  public void setPistonState (boolean up) {
+  public void setPistonsState (boolean up) {
     if (up) {
       pistons.set(Value.kReverse);
     } else {

@@ -1,22 +1,22 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakePistons;
+import frc.robot.subsystems.Ramp;
 
-public class IntakePistonsSetState extends CommandBase {
+public class RampSetState extends CommandBase {
 
   private boolean mUp;
-  private final IntakePistons mIntakePistons;
+  private final Ramp mRamp;
 
-  public IntakePistonsSetState(IntakePistons intakePistons, boolean up) {
-    mIntakePistons = intakePistons;
+  public RampSetState(Ramp ramp, boolean up) {
+    mRamp = ramp;
     mUp = up;
-    addRequirements(mIntakePistons);
+    addRequirements(mRamp);
   }
 
   @Override
   public void initialize() {
-    mIntakePistons.setPistonsState(mUp);
+    mRamp.setPistonState(mUp);
   }
 
   @Override
