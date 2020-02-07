@@ -20,13 +20,13 @@ public class IntakeMotors extends SubsystemBase {
   public void periodic() {
   }
 
-  public void setPercentOutput(double motorOutput) {
-    if (motorOutput > 1) {
-      motorOutput = 1;
-    } else if (motorOutput < -1) {
-      motorOutput = -1;
+  public void setPercentOutput(double output) {
+    if (output > 1) {
+      output = 1;
+    } else if (output < -1) {
+      output = -1;
     }
     
-    motors.set(motorOutput);
+    motors.set(output);
   }
 }

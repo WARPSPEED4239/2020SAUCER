@@ -17,9 +17,15 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ClimberSetPercentOutput;
 import frc.robot.commands.DrivetrainArcadeDrive;
 import frc.robot.commands.ElevatorSetPercentOutput;
+import frc.robot.commands.FeederWheelsSetPercentOutput;
+import frc.robot.commands.HopperSetPercentOutput;
 import frc.robot.commands.IntakeMotorsSetPercentOutput;
 import frc.robot.commands.IntakePistonsSetState;
+import frc.robot.commands.PanelSpinnerMotorSetPercentOutput;
+import frc.robot.commands.PanelSpinnerPistonSetState;
 import frc.robot.commands.RampSetState;
+import frc.robot.commands.ShooterSetPercentOutput;
+import frc.robot.commands.TurretSetPercentOutput;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
@@ -46,28 +52,26 @@ public class RobotContainer {
 	private final Hopper mHopper = new Hopper();
 	private final IntakeMotors mIntakeMotors = new IntakeMotors();
 	private final IntakePistons mIntakePistons = new IntakePistons();
-	private final PanelSpinnerMotor mPanelSpinner = new PanelSpinnerMotor();
+	private final PanelSpinnerMotor mPanelSpinnerMotor = new PanelSpinnerMotor();
 	private final PanelSpinnerPiston mPanelSpinnerPiston = new PanelSpinnerPiston();
 	private final Ramp mRamp = new Ramp();
 	private final Shooter mShooter = new Shooter();
 	private final ShooterAngleAdjust mShooterAngleAdjust = new ShooterAngleAdjust();
 	private final Turret mTurret = new Turret();
 
-	private final ClimberSetPercentOutput mClimberSetPercentOutput = new ClimberSetPercentOutput(mClimber, 0.0); //TODO Is this neccessary?
-	private final DrivetrainArcadeDrive mDrivetrainArcadeDrive = new DrivetrainArcadeDrive(mDrivetrain, xbox);
-	private final ElevatorSetPercentOutput mElevatorSetPercentOutput = new ElevatorSetPercentOutput(mElevator, 0.0);
-	private final IntakeMotorsSetPercentOutput mIntakeSetPercentOutput = new IntakeMotorsSetPercentOutput(mIntakeMotors, 0.0);
-	private final IntakePistonsSetState mIntakePistonsSetState = new IntakePistonsSetState(mIntakePistons, true);
-	private final RampSetState mRampSetState = new RampSetState(mRamp, false);
-
 	public RobotContainer() {
-
-		CommandScheduler.getInstance().setDefaultCommand(mClimber, mClimberSetPercentOutput);
-		CommandScheduler.getInstance().setDefaultCommand(mDrivetrain, mDrivetrainArcadeDrive);
-		CommandScheduler.getInstance().setDefaultCommand(mElevator, mElevatorSetPercentOutput);
-		CommandScheduler.getInstance().setDefaultCommand(mIntakeMotors, mIntakeSetPercentOutput);
-		CommandScheduler.getInstance().setDefaultCommand(mIntakePistons, mIntakePistonsSetState);
-		CommandScheduler.getInstance().setDefaultCommand(mRamp, mRampSetState);
+		CommandScheduler.getInstance().setDefaultCommand(mClimber, new ClimberSetPercentOutput(mClimber, 0.0));
+		CommandScheduler.getInstance().setDefaultCommand(mDrivetrain, new DrivetrainArcadeDrive(mDrivetrain, xbox));
+		CommandScheduler.getInstance().setDefaultCommand(mElevator, new ElevatorSetPercentOutput(mElevator, 0.0));
+		CommandScheduler.getInstance().setDefaultCommand(mFeederWheels, new FeederWheelsSetPercentOutput(mFeederWheels, 0.0));
+		CommandScheduler.getInstance().setDefaultCommand(mHopper, new HopperSetPercentOutput(mHopper, 0.0));
+		CommandScheduler.getInstance().setDefaultCommand(mIntakeMotors, new IntakeMotorsSetPercentOutput(mIntakeMotors, 0.0));
+		CommandScheduler.getInstance().setDefaultCommand(mIntakePistons, new IntakePistonsSetState(mIntakePistons, true));
+		CommandScheduler.getInstance().setDefaultCommand(mPanelSpinnerMotor, new PanelSpinnerMotorSetPercentOutput(mPanelSpinnerMotor, 0.0));
+		CommandScheduler.getInstance().setDefaultCommand(mPanelSpinnerPiston, new PanelSpinnerPistonSetState(mPanelSpinnerPiston, false));
+		CommandScheduler.getInstance().setDefaultCommand(mShooter, new ShooterSetPercentOutput(mShooter, 0.0));
+		CommandScheduler.getInstance().setDefaultCommand(mTurret, new TurretSetPercentOutput(mTurret, 0.0));
+		CommandScheduler.getInstance().setDefaultCommand(mRamp, new RampSetState(mRamp, false));
 
 		configureButtonBindings();
 	}

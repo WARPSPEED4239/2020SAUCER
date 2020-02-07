@@ -22,4 +22,14 @@ public class Turret extends SubsystemBase {
   @Override
   public void periodic() {
   }
+
+  public void setPercentOutput(double output) {
+    if (output > 1) {
+      output = 1;
+    } else if (output < -1) {
+      output = -1;
+    }
+    
+    motor.set(output);
+  }
 }

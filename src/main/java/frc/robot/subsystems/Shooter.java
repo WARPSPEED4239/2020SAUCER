@@ -34,12 +34,20 @@ public class Shooter extends SubsystemBase {
     motor2.follow(motor1);
 
     motor1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-
     motor1.setSensorPhase(true);
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+  }
+
+  public void setPercentOutput(double output) {
+    if (output > 1) {
+      output = 1;
+    } else if (output < -1) {
+      output = -1;
+    }
+    
+    motor1.set(output);
   }
 }
