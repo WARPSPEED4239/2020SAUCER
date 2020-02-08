@@ -24,10 +24,10 @@ public class PanelSpinnerMotor extends SubsystemBase {
   }
 
   public void setPercentOutput(double output) {
-    if (output > 1) {
-      output = 1;
-    } else if (output < -1) {
-      output = -1;
+    if (output > 1.0) {
+      output = 1.0;
+    } else if (output < -1.0) {
+      output = -1.0;
     }
     
     motor.set(output);

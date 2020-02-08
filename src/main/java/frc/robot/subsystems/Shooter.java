@@ -2,9 +2,13 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SensorTerm;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -14,6 +18,8 @@ public class Shooter extends SubsystemBase {
 
   private WPI_TalonSRX motor1 = new WPI_TalonSRX(Constants.SHOOTER_MOTOR_TOP);
   private WPI_TalonSRX motor2 = new WPI_TalonSRX(Constants.SHOOTER_MOTOR_BOTTOM);
+
+  private NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
   public Shooter() {
     motor1.configFactoryDefault();
@@ -33,19 +39,28 @@ public class Shooter extends SubsystemBase {
     
     motor2.follow(motor1);
 
-    motor1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    motor1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.TIMEOUT_MS);
     motor1.setSensorPhase(true);
+
+    motor1.config_kF(0, 0.0, Constants.TIMEOUT_MS);
+    motor1.config_kP(0, 0.0, Constants.TIMEOUT_MS);
+		motor1.config_kI(0, 0.0, Constants.TIMEOUT_MS);
+		motor1.config_kD(0, 0.0, Constants.TIMEOUT_MS);
   }
 
   @Override
   public void periodic() {
   }
 
+  public NetworkTable getLimelightTable() {
+    return table;
+  }
+
   public void setPercentOutput(double output) {
-    if (output > 1) {
-      output = 1;
-    } else if (output < -1) {
-      output = -1;
+    if (output > 1.0) {
+      output = 1.0;
+    } else if (output < -1.0) {
+      output = -1.0;
     }
     
     motor1.set(output);

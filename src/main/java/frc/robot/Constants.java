@@ -36,4 +36,6 @@ public final class Constants {
                             RAMP_SOLENOID_REVERSE = 7,
 
                             COMPRESSOR = 0;                           //Compressor
+
+    public static final int TIMEOUT_MS = 30;
 }
