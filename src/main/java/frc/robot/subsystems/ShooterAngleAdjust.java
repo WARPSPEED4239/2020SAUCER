@@ -10,10 +10,14 @@ public class ShooterAngleAdjust extends SubsystemBase {
   private Servo rightServo = new Servo(Constants.SHOOTER_RIGHT_SERVO);
 
   public ShooterAngleAdjust() {
-    
   }
 
   @Override
   public void periodic() {
+  }
+
+  public void setPercentAngle(double percent) {
+    leftServo.set(percent);
+    rightServo.set(percent);
   }
 }

@@ -10,7 +10,6 @@ public class PanelSpinnerPiston extends SubsystemBase {
   private DoubleSolenoid piston = new DoubleSolenoid(Constants.PANNEL_SPINNER_SOLENOID_FORWARD, Constants.PANNEL_SPINNER_SOLENOID_REVERSE);
   
   public PanelSpinnerPiston() {
-
   }
 
   @Override

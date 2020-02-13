@@ -4,10 +4,12 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.PanelSpinnerMotor;
 
 public class Robot extends TimedRobot {
   private String gameData;
   private Command mAutonomousCommand;
+  private PanelSpinnerMotor mPanelSpinnerMotor;
 
   private RobotContainer mRobotContainer;
 
@@ -15,12 +17,16 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+
     mRobotContainer = new RobotContainer();
+    mPanelSpinnerMotor = new PanelSpinnerMotor();
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+
+    mPanelSpinnerMotor.updateColorSensorData();
   }
 
   @Override
@@ -58,19 +64,19 @@ public class Robot extends TimedRobot {
     if (gameData.length() > 0) {
       switch (gameData.charAt(0)) {
         case 'B':
-          //Blue Code
+          mPanelSpinnerMotor.setGameDataColor("Blue");
           break;
         case 'G':
-          //Green Code
+          mPanelSpinnerMotor.setGameDataColor("Green");
           break;
         case 'R':
-          //Red Code
+          mPanelSpinnerMotor.setGameDataColor("Red");
           break;
         case 'Y':
-          //Yellow Code
+          mPanelSpinnerMotor.setGameDataColor("Yellow");
           break;
         default:
-        //Unknown/Error
+          mPanelSpinnerMotor.setGameDataColor("Error");
           break;
       }
     }

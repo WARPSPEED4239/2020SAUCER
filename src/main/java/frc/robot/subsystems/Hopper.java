@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -31,5 +32,10 @@ public class Hopper extends SubsystemBase {
     }
 
     motor.set(output);
+  }
+
+  public void setVelocity(double RPM) {
+    final double VelocityInSRXUnits = RPM / 600 * Constants.COUNTS_PER_REVOLUTION_ENCODER;
+    motor.set(ControlMode.Velocity, VelocityInSRXUnits);
   }
 }

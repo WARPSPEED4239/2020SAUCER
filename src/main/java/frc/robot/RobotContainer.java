@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ClimberSetPercentOutput;
 import frc.robot.commands.DrivetrainArcadeDrive;
-import frc.robot.commands.ElevatorSetPercentOutput;
 import frc.robot.commands.FeederWheelsSetPercentOutput;
 import frc.robot.commands.HopperSetPercentOutput;
 import frc.robot.commands.IntakeMotorsSetPercentOutput;
@@ -28,7 +27,6 @@ import frc.robot.commands.ShooterSetPercentOutput;
 import frc.robot.commands.TurretSetPercentOutput;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.FeederWheels;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.IntakeMotors;
@@ -47,7 +45,6 @@ public class RobotContainer {
 
 	private final Climber mClimber = new Climber();
 	private final Drivetrain mDrivetrain = new Drivetrain();
-	private final Elevator mElevator = new Elevator();
 	private final FeederWheels mFeederWheels = new FeederWheels();
 	private final Hopper mHopper = new Hopper();
 	private final IntakeMotors mIntakeMotors = new IntakeMotors();
@@ -62,7 +59,6 @@ public class RobotContainer {
 	public RobotContainer() {
 		CommandScheduler.getInstance().setDefaultCommand(mClimber, new ClimberSetPercentOutput(mClimber, 0.0));
 		CommandScheduler.getInstance().setDefaultCommand(mDrivetrain, new DrivetrainArcadeDrive(mDrivetrain, xbox));
-		CommandScheduler.getInstance().setDefaultCommand(mElevator, new ElevatorSetPercentOutput(mElevator, 0.0));
 		CommandScheduler.getInstance().setDefaultCommand(mFeederWheels, new FeederWheelsSetPercentOutput(mFeederWheels, 0.0));
 		CommandScheduler.getInstance().setDefaultCommand(mHopper, new HopperSetPercentOutput(mHopper, 0.0));
 		CommandScheduler.getInstance().setDefaultCommand(mIntakeMotors, new IntakeMotorsSetPercentOutput(mIntakeMotors, 0.0));
@@ -118,8 +114,6 @@ public class RobotContainer {
 		bButton10 = new JoystickButton(board, 10);
 		bButton11 = new JoystickButton(board, 11);
 
-		jButton9.whileHeld(new ElevatorSetPercentOutput(mElevator, -1.0));
-		jButton10.whileHeld(new ElevatorSetPercentOutput(mElevator, 1.0));
 		jButton11.whileHeld(new ClimberSetPercentOutput(mClimber, -1.0));
 	}
 

@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
@@ -29,6 +30,9 @@ public class Shooter extends SubsystemBase {
     motor1.setNeutralMode(NeutralMode.Coast);
     motor2.setNeutralMode(NeutralMode.Coast);
 
+    motor1.configClosedLoopPeakOutput(0, 1.0);
+    motor2.configClosedLoopPeakOutput(0, 1.0);
+  
     motor1.configSupplyCurrentLimit(CURRENT_LIMIT);
     motor2.configSupplyCurrentLimit(CURRENT_LIMIT);
 
@@ -62,5 +66,10 @@ public class Shooter extends SubsystemBase {
     }
     
     motor1.set(output);
+  }
+
+  public void setVelocity(double RPM) {
+    final double VelocityInSRXUnits = RPM / 600 * Constants.COUNTS_PER_REVOLUTION_ENCODER;
+    motor1.set(ControlMode.Velocity, VelocityInSRXUnits);
   }
 }

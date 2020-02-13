@@ -8,19 +8,22 @@ public final class Constants {
                             DRIVETRAIN_RIGHT_MOTOR_TWO = 5,   //PDP #14
                             DRIVETRAIN_RIGHT_MOTOR_THREE = 6, //PDP #13
                             
-                            CLIMBER_MOTOR = 1,                //PDP #X //TalonSRX
-                            FEEDER_MOTOR = 2,                 //PDP #X
-                            HOPPER_MOTOR = 3,                 //PDP #X
-                            INTAKE_MOTORS = 4,                //PDP #X
-                            PANNEL_SPINNER_MOTOR = 5,         //PDP #X
-                            SHOOTER_MOTOR_TOP = 6,            //PDP #X
-                            SHOOTER_MOTOR_BOTTOM = 7,         //PDP #X
-                            TURRET_MOTOR = 8,                 //PDP #X
+                            ELEVATOR_MOTOR = 1,               //PDP #X //TalonSRX //775Pro
+                            FEEDER_WHEELS_MOTOR = 2,          //PDP #X ENCODER //775Pro
+                            HOPPER_MOTOR = 3,                 //PDP #X ENCODER //775Pro
+                            INTAKE_MOTORS = 4,                //PDP #X //Bags
+                            PANNEL_SPINNER_MOTOR = 5,         //PDP #X ENCODER //Bag
+                            SHOOTER_MOTOR_TOP = 6,            //PDP #X ENCODER //Redline
+                            SHOOTER_MOTOR_BOTTOM = 7,         //PDP #X //Redline
+                            TURRET_MOTOR = 8,                 //PDP #X ENCODER //Bag
 
-                            ELEVATOR_MOTOR = 1;               //PDP #X //SparkMAX
+                            CLIMBER_MOTOR = 1;                //PDP #X //SparkMAX //NEO
 
     public static final int SHOOTER_LEFT_SERVO = 0,           //PWM
                             SHOOTER_RIGHT_SERVO = 1,
+        
+                            TURRET_LEFT_LIMIT = 0,            //DIO
+                            TURRET_RIGHT_LIMIT = 1,
 
                             PRESSURE_SENSOR = 0,              //Analog In
 
@@ -37,5 +40,6 @@ public final class Constants {
 
                             COMPRESSOR = 0;                           //Compressor
 
-    public static final int TIMEOUT_MS = 30;
+    public static final int TIMEOUT_MS = 30,
+                            COUNTS_PER_REVOLUTION_ENCODER = 4096;
 }

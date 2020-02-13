@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
@@ -12,7 +13,7 @@ public class FeederWheels extends SubsystemBase {
   private final double RAMP_RATE = 0.2;
   private final SupplyCurrentLimitConfiguration CURRENT_LIMIT = new SupplyCurrentLimitConfiguration (true, 30.0, 40.0, 1.0); //TODO If not working get rid of this?
   
-  private WPI_TalonSRX motor = new WPI_TalonSRX(Constants.FEEDER_MOTOR);
+  private WPI_TalonSRX motor = new WPI_TalonSRX(Constants.FEEDER_WHEELS_MOTOR);
   
   public FeederWheels() {
     motor.configFactoryDefault();
@@ -36,5 +37,10 @@ public class FeederWheels extends SubsystemBase {
     }
 
     motor.set(output);
+  }
+
+  public void setVelocity(double RPM) {
+    final double VelocityInSRXUnits = RPM / 600 * Constants.COUNTS_PER_REVOLUTION_ENCODER;
+    motor.set(ControlMode.Velocity, VelocityInSRXUnits);
   }
 }
