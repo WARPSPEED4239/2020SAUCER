@@ -31,7 +31,7 @@ public class PanelSpinnerMotor extends SubsystemBase {
   public PanelSpinnerMotor() {
     motor.configFactoryDefault();
     motor.setInverted(false);
-    motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.TIMEOUT_MS);
     motor.setSensorPhase(false);
     motor.setNeutralMode(NeutralMode.Brake);
 
@@ -39,10 +39,10 @@ public class PanelSpinnerMotor extends SubsystemBase {
     motor.configPeakOutputReverse(-0.9);
     motor.configClosedLoopPeakOutput(0, 0.9);
 
-    motor.config_kF(0, 0.0);
-    motor.config_kP(0, 0.0);
-    motor.config_kI(0, 0.0);
-    motor.config_kD(0, 0.0);
+    motor.config_kF(0, 0.0, Constants.TIMEOUT_MS);
+    motor.config_kP(0, 0.0, Constants.TIMEOUT_MS);
+		motor.config_kI(0, 0.0, Constants.TIMEOUT_MS);
+		motor.config_kD(0, 0.0, Constants.TIMEOUT_MS);
 
     mColorMatcher.addColorMatch(BLUE);
     mColorMatcher.addColorMatch(GREEN);
@@ -94,7 +94,7 @@ public class PanelSpinnerMotor extends SubsystemBase {
   }
 
   public void setRotations(double rotations) {
-    double rotationsInSRXUntis = rotations * 32 / 2 * Constants.COUNTS_PER_REVOLUTION_ENCODER;
-    motor.set(ControlMode.MotionMagic, rotationsInSRXUntis);
+    int rotationsInSRXUntis = (int) (rotations * 32 / 2 * Constants.COUNTS_PER_REVOLUTION_ENCODER);
+    motor.set(ControlMode.Position, rotationsInSRXUntis);
   }
 }

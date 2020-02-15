@@ -16,8 +16,13 @@ public class Hopper extends SubsystemBase {
     motor.configFactoryDefault();
     motor.setInverted(false);
     motor.setNeutralMode(NeutralMode.Brake);
-    motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.TIMEOUT_MS);
     motor.setSensorPhase(false);
+
+    motor.config_kF(0, 0.0, Constants.TIMEOUT_MS);
+    motor.config_kP(0, 0.0, Constants.TIMEOUT_MS);
+		motor.config_kI(0, 0.0, Constants.TIMEOUT_MS);
+		motor.config_kD(0, 0.0, Constants.TIMEOUT_MS);
   }
 
   @Override
@@ -34,8 +39,8 @@ public class Hopper extends SubsystemBase {
     motor.set(output);
   }
 
-  public void setVelocity(double RPM) {
-    final double VelocityInSRXUnits = RPM / 600 * Constants.COUNTS_PER_REVOLUTION_ENCODER;
+  public void setVelocity(double RPM) { //TODO Velocity? Position? What is needed if any.
+    int VelocityInSRXUnits = (int) (RPM / 600 * Constants.COUNTS_PER_REVOLUTION_ENCODER);
     motor.set(ControlMode.Velocity, VelocityInSRXUnits);
   }
 }

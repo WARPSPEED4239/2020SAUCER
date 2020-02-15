@@ -5,21 +5,24 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.PanelSpinnerMotor;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Turret;
 
 public class Robot extends TimedRobot {
   private String gameData;
   private Command mAutonomousCommand;
   private PanelSpinnerMotor mPanelSpinnerMotor;
+  private Turret mTurret;
+  private Shooter mShooter;
 
   private RobotContainer mRobotContainer;
 
   @Override
   public void robotInit() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
-
     mRobotContainer = new RobotContainer();
     mPanelSpinnerMotor = new PanelSpinnerMotor();
+    mTurret = new Turret();
+    mShooter = new Shooter();
   }
 
   @Override
@@ -27,6 +30,14 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
 
     mPanelSpinnerMotor.updateColorSensorData();
+
+    if (mTurret.getLeftLimit()) {
+      mTurret.setEncoderAngleInDegrees(-90.0);
+    } else if (mTurret.getRightLimit()) {
+      mTurret.setEncoderAngleInDegrees(330.0); //TODO Put in actual number
+    }
+
+    mShooter.updateSmartDashboard();
   }
 
   @Override

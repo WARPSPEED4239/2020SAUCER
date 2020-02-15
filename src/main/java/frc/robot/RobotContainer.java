@@ -14,28 +14,33 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.AngleAdjustSetPosition;
 import frc.robot.commands.ClimberSetPercentOutput;
 import frc.robot.commands.DrivetrainArcadeDrive;
 import frc.robot.commands.FeederWheelsSetPercentOutput;
 import frc.robot.commands.HopperSetPercentOutput;
 import frc.robot.commands.IntakeMotorsSetPercentOutput;
 import frc.robot.commands.IntakePistonsSetState;
+import frc.robot.commands.LimelightDriversMode;
 import frc.robot.commands.PanelSpinnerMotorSetPercentOutput;
 import frc.robot.commands.PanelSpinnerPistonSetState;
 import frc.robot.commands.RampSetState;
 import frc.robot.commands.ShooterSetPercentOutput;
 import frc.robot.commands.TurretSetPercentOutput;
+import frc.robot.commands.TurretSetPosition;
+import frc.robot.commands.automated.VisionTracking;
+import frc.robot.subsystems.AngleAdjust;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.FeederWheels;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.IntakeMotors;
 import frc.robot.subsystems.IntakePistons;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.PanelSpinnerMotor;
 import frc.robot.subsystems.PanelSpinnerPiston;
 import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.ShooterAngleAdjust;
 import frc.robot.subsystems.Turret;
 
 public class RobotContainer {
@@ -43,30 +48,33 @@ public class RobotContainer {
 	private Joystick joystick = new Joystick(1);
 	private Joystick board = new Joystick(2);
 
+	private final AngleAdjust mAngleAdjust = new AngleAdjust();
 	private final Climber mClimber = new Climber();
 	private final Drivetrain mDrivetrain = new Drivetrain();
 	private final FeederWheels mFeederWheels = new FeederWheels();
 	private final Hopper mHopper = new Hopper();
 	private final IntakeMotors mIntakeMotors = new IntakeMotors();
 	private final IntakePistons mIntakePistons = new IntakePistons();
+	private final Limelight mLimelight = new Limelight();
 	private final PanelSpinnerMotor mPanelSpinnerMotor = new PanelSpinnerMotor();
 	private final PanelSpinnerPiston mPanelSpinnerPiston = new PanelSpinnerPiston();
 	private final Ramp mRamp = new Ramp();
 	private final Shooter mShooter = new Shooter();
-	private final ShooterAngleAdjust mShooterAngleAdjust = new ShooterAngleAdjust();
 	private final Turret mTurret = new Turret();
 
 	public RobotContainer() {
+		CommandScheduler.getInstance().setDefaultCommand(mAngleAdjust, new AngleAdjustSetPosition(mAngleAdjust, 0.5));
 		CommandScheduler.getInstance().setDefaultCommand(mClimber, new ClimberSetPercentOutput(mClimber, 0.0));
 		CommandScheduler.getInstance().setDefaultCommand(mDrivetrain, new DrivetrainArcadeDrive(mDrivetrain, xbox));
 		CommandScheduler.getInstance().setDefaultCommand(mFeederWheels, new FeederWheelsSetPercentOutput(mFeederWheels, 0.0));
 		CommandScheduler.getInstance().setDefaultCommand(mHopper, new HopperSetPercentOutput(mHopper, 0.0));
 		CommandScheduler.getInstance().setDefaultCommand(mIntakeMotors, new IntakeMotorsSetPercentOutput(mIntakeMotors, 0.0));
 		CommandScheduler.getInstance().setDefaultCommand(mIntakePistons, new IntakePistonsSetState(mIntakePistons, true));
+		CommandScheduler.getInstance().setDefaultCommand(mLimelight, new LimelightDriversMode(mLimelight));
 		CommandScheduler.getInstance().setDefaultCommand(mPanelSpinnerMotor, new PanelSpinnerMotorSetPercentOutput(mPanelSpinnerMotor, 0.0));
 		CommandScheduler.getInstance().setDefaultCommand(mPanelSpinnerPiston, new PanelSpinnerPistonSetState(mPanelSpinnerPiston, false));
 		CommandScheduler.getInstance().setDefaultCommand(mShooter, new ShooterSetPercentOutput(mShooter, 0.0));
-		CommandScheduler.getInstance().setDefaultCommand(mTurret, new TurretSetPercentOutput(mTurret, 0.0));
+		CommandScheduler.getInstance().setDefaultCommand(mTurret, new TurretSetPercentOutput(mTurret, joystick));
 		CommandScheduler.getInstance().setDefaultCommand(mRamp, new RampSetState(mRamp, false));
 
 		configureButtonBindings();
@@ -114,7 +122,23 @@ public class RobotContainer {
 		bButton10 = new JoystickButton(board, 10);
 		bButton11 = new JoystickButton(board, 11);
 
-		jButton11.whileHeld(new ClimberSetPercentOutput(mClimber, -1.0));
+		jButton1.whileHeld(new ShooterSetPercentOutput(mShooter, 1.0));
+		jButton1.whileHeld(new FeederWheelsSetPercentOutput(mFeederWheels, 1.0));
+		jButton2.whileHeld(new RampSetState(mRamp, true));
+		jButton3.whileHeld(new IntakeMotorsSetPercentOutput(mIntakeMotors, -1.0));
+		jButton4.whileHeld(new IntakeMotorsSetPercentOutput(mIntakeMotors, 1.0));
+		jButton5.whenPressed(new IntakePistonsSetState(mIntakePistons, true));
+		jButton6.whenPressed(new IntakePistonsSetState(mIntakePistons, false));
+		jButton7.whileHeld(new HopperSetPercentOutput(mHopper, 0.3));
+		jButton8.whileHeld(new HopperSetPercentOutput(mHopper, -0.5));
+
+
+		//bButton1.toggleWhenPressed(new VisionTracking(mAngleAdjust, mFeederWheels, mHopper, mLimelight, mRamp, mShooter, mTurret));
+		/*jButton11.whileHeld(new ClimberSetPercentOutput(mClimber, -1.0));
+		bButton4.whenPressed(new TurretSetPosition(mTurret, 0.0));
+		bButton5.whenPressed(new TurretSetPosition(mTurret, -90.0));
+		bButton6.whenPressed(new TurretSetPosition(mTurret, 90.0));
+		bButton7.whenPressed(new TurretSetPosition(mTurret, 180.0));*/
 	}
 
 	public XboxController getController() {

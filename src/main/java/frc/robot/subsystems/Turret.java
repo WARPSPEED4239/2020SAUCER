@@ -19,8 +19,13 @@ public class Turret extends SubsystemBase {
     motor.configFactoryDefault();
     motor.setInverted(false);
     motor.setNeutralMode(NeutralMode.Brake);
-    motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.TIMEOUT_MS);
     motor.setSensorPhase(false);
+
+    motor.config_kF(0, 0.0, Constants.TIMEOUT_MS);
+    motor.config_kP(0, 0.0, Constants.TIMEOUT_MS);
+		motor.config_kI(0, 0.0, Constants.TIMEOUT_MS);
+		motor.config_kD(0, 0.0, Constants.TIMEOUT_MS);
   }
 
   @Override
@@ -45,8 +50,21 @@ public class Turret extends SubsystemBase {
     motor.set(output);
   }
 
-  public void setAngle(double degrees) {
-    double angleInSRXUnits = degrees / 360 * 14.5 / 1.3 * Constants.COUNTS_PER_REVOLUTION_ENCODER;
+  public double getMotorOutputVoltage() {
+    return motor.getMotorOutputVoltage();
+  }
+
+  public void zeroEncoder() {
+    motor.setSelectedSensorPosition(0);
+  }
+
+  public void setAngleInDegrees(double degrees) {
+    int angleInSRXUnits = (int) (degrees / 360 * 14.5 / 1.3 * Constants.COUNTS_PER_REVOLUTION_ENCODER);
     motor.set(ControlMode.MotionMagic, angleInSRXUnits);
+  }
+
+  public void setEncoderAngleInDegrees(double degrees) {
+    int angleInSRXUnits = (int) (degrees / 360 * 14.5 / 1.3 * Constants.COUNTS_PER_REVOLUTION_ENCODER);
+    motor.setSelectedSensorPosition(angleInSRXUnits);
   }
 }

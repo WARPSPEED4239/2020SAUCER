@@ -21,8 +21,13 @@ public class FeederWheels extends SubsystemBase {
     motor.setNeutralMode(NeutralMode.Brake);
     motor.configSupplyCurrentLimit(CURRENT_LIMIT);
     motor.configOpenloopRamp(RAMP_RATE);
-    motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.TIMEOUT_MS);
     motor.setSensorPhase(false);
+
+    motor.config_kF(0, 0.0, Constants.TIMEOUT_MS);
+    motor.config_kP(0, 0.0, Constants.TIMEOUT_MS);
+		motor.config_kI(0, 0.0, Constants.TIMEOUT_MS);
+		motor.config_kD(0, 0.0, Constants.TIMEOUT_MS);
   }
 
   @Override
@@ -40,7 +45,7 @@ public class FeederWheels extends SubsystemBase {
   }
 
   public void setVelocity(double RPM) {
-    final double VelocityInSRXUnits = RPM / 600 * Constants.COUNTS_PER_REVOLUTION_ENCODER;
+    int VelocityInSRXUnits = (int) (RPM / 600 * Constants.COUNTS_PER_REVOLUTION_ENCODER);
     motor.set(ControlMode.Velocity, VelocityInSRXUnits);
   }
 }

@@ -6,8 +6,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -15,10 +14,8 @@ public class Shooter extends SubsystemBase {
   private final double RAMP_RATE = 0.2;
   private final SupplyCurrentLimitConfiguration CURRENT_LIMIT = new SupplyCurrentLimitConfiguration (true, 40.0, 60.0, 1.0); //TODO If not working get rid of this?
 
-  private WPI_TalonSRX motor1 = new WPI_TalonSRX(Constants.SHOOTER_MOTOR_TOP);
-  private WPI_TalonSRX motor2 = new WPI_TalonSRX(Constants.SHOOTER_MOTOR_BOTTOM);
-
-  private NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+  private WPI_TalonSRX motor1 = new WPI_TalonSRX(Constants.SHOOTER_MOTOR_BOTTOM);
+  private WPI_TalonSRX motor2 = new WPI_TalonSRX(Constants.SHOOTER_MOTOR_TOP);
 
   public Shooter() {
     motor1.configFactoryDefault();
@@ -54,10 +51,6 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
   }
 
-  public NetworkTable getLimelightTable() {
-    return table;
-  }
-
   public void setPercentOutput(double output) {
     if (output > 1.0) {
       output = 1.0;
@@ -69,7 +62,15 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setVelocity(double RPM) {
-    final double VelocityInSRXUnits = RPM / 600 * Constants.COUNTS_PER_REVOLUTION_ENCODER;
+    int VelocityInSRXUnits = (int) (RPM / 600.0 * Constants.COUNTS_PER_REVOLUTION_ENCODER);
     motor1.set(ControlMode.Velocity, VelocityInSRXUnits);
+  }
+
+  public double getRPM() {
+    return motor1.getSelectedSensorVelocity();
+  }
+
+  public void updateSmartDashboard() {
+    SmartDashboard.putNumber("Shooter RPM", getRPM());
   }
 }

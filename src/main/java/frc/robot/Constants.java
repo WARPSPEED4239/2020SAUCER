@@ -9,7 +9,7 @@ public final class Constants {
                             DRIVETRAIN_RIGHT_MOTOR_THREE = 6, //PDP #13
                             
                             ELEVATOR_MOTOR = 1,               //PDP #X //TalonSRX //775Pro
-                            FEEDER_WHEELS_MOTOR = 2,          //PDP #X ENCODER //775Pro
+                            FEEDER_WHEELS_MOTOR = 2,          //PDP #4 ENCODER //775Pro
                             HOPPER_MOTOR = 3,                 //PDP #X ENCODER //775Pro
                             INTAKE_MOTORS = 4,                //PDP #X //Bags
                             PANNEL_SPINNER_MOTOR = 5,         //PDP #X ENCODER //Bag
@@ -42,4 +42,6 @@ public final class Constants {
 
     public static final int TIMEOUT_MS = 30,
                             COUNTS_PER_REVOLUTION_ENCODER = 4096;
+                           
+    public static final double EPSILON = 0.0001;
 }
