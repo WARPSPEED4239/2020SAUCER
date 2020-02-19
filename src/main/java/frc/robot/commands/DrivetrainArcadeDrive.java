@@ -4,15 +4,18 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.PneumaticController;
 
 public class DrivetrainArcadeDrive extends CommandBase {
   private final Drivetrain mDrivetrain;
+  private final PneumaticController mPneumaticController;
   private final XboxController mController;
   
-  public DrivetrainArcadeDrive(Drivetrain drivetrain, XboxController controller) {
+  public DrivetrainArcadeDrive(Drivetrain drivetrain, PneumaticController pneumaticController, XboxController controller) {
     mDrivetrain = drivetrain;
+    mPneumaticController = pneumaticController;
     mController = controller;
-    addRequirements(mDrivetrain);
+    addRequirements(mDrivetrain, mPneumaticController);
   }
 
   @Override
@@ -32,10 +35,12 @@ public class DrivetrainArcadeDrive extends CommandBase {
     }
 
     if (mController.getBButton()) {
+      mPneumaticController.turnOnCompressor();
       mDrivetrain.setHighGear();
     }
 
     if (mController.getAButton()) {
+      mPneumaticController.turnOffCompressor();
       mDrivetrain.setLowGear();
     }
     

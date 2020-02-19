@@ -1,35 +1,29 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Turret extends SubsystemBase {
  
   private WPI_TalonSRX motor = new WPI_TalonSRX(Constants.TURRET_MOTOR);
-  private DigitalInput leftLimit = new DigitalInput(Constants.TURRET_LEFT_LIMIT);
+  private DigitalInput leftLimit = new DigitalInput(Constants.TURRET_LEFT_LIMIT);;
   private DigitalInput rightLimit = new DigitalInput(Constants.TURRET_RIGHT_LIMIT);
 
   public Turret() {
     motor.configFactoryDefault();
     motor.setInverted(false);
     motor.setNeutralMode(NeutralMode.Brake);
-    motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.TIMEOUT_MS);
-    motor.setSensorPhase(false);
-
-    motor.config_kF(0, 0.0, Constants.TIMEOUT_MS);
-    motor.config_kP(0, 0.0, Constants.TIMEOUT_MS);
-		motor.config_kI(0, 0.0, Constants.TIMEOUT_MS);
-		motor.config_kD(0, 0.0, Constants.TIMEOUT_MS);
   }
 
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("Turret Left Limit", getLeftLimit());
+    SmartDashboard.putBoolean("Turret Right Limit", getRightLimit());
   }
 
   public boolean getLeftLimit() {
@@ -52,19 +46,5 @@ public class Turret extends SubsystemBase {
 
   public double getMotorOutputVoltage() {
     return motor.getMotorOutputVoltage();
-  }
-
-  public void zeroEncoder() {
-    motor.setSelectedSensorPosition(0);
-  }
-
-  public void setAngleInDegrees(double degrees) {
-    int angleInSRXUnits = (int) (degrees / 360 * 14.5 / 1.3 * Constants.COUNTS_PER_REVOLUTION_ENCODER);
-    motor.set(ControlMode.MotionMagic, angleInSRXUnits);
-  }
-
-  public void setEncoderAngleInDegrees(double degrees) {
-    int angleInSRXUnits = (int) (degrees / 360 * 14.5 / 1.3 * Constants.COUNTS_PER_REVOLUTION_ENCODER);
-    motor.setSelectedSensorPosition(angleInSRXUnits);
   }
 }

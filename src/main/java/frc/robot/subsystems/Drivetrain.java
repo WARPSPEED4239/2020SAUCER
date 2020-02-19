@@ -1,8 +1,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
@@ -21,8 +21,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Drivetrain extends SubsystemBase {
-  private final double RAMP_RATE = 0.2;
-  private final SupplyCurrentLimitConfiguration CURRENT_LIMIT = new SupplyCurrentLimitConfiguration (true, 40.0, 60.0, 1.0); //TODO If not working get rid of this?
+  private final double RAMP_RATE = 0.3;
+  //private final SupplyCurrentLimitConfiguration CURRENT_LIMIT = new SupplyCurrentLimitConfiguration (true, 40.0, 60.0, 1.0); //TODO If not working get rid of this?
 
   private double[] ypr = new double[3];
 
@@ -68,12 +68,17 @@ public class Drivetrain extends SubsystemBase {
     rightMotor2.configFactoryDefault();
     rightMotor3.configFactoryDefault();
 
+    leftMotor2.follow(leftMotor1);
+    leftMotor3.follow(leftMotor1);
+    rightMotor2.follow(rightMotor1);
+    rightMotor3.follow(rightMotor1);
+
     leftMotor1.setInverted(false);
-    leftMotor2.setInverted(false);
-    leftMotor3.setInverted(false);
+    leftMotor2.setInverted(InvertType.FollowMaster);
+    leftMotor3.setInverted(InvertType.FollowMaster);
     rightMotor1.setInverted(false);
-    rightMotor2.setInverted(false);
-    rightMotor3.setInverted(false);
+    rightMotor2.setInverted(InvertType.FollowMaster);
+    rightMotor3.setInverted(InvertType.FollowMaster);
   
     leftMotor1.setNeutralMode(NeutralMode.Brake);
     leftMotor2.setNeutralMode(NeutralMode.Brake);
@@ -82,12 +87,12 @@ public class Drivetrain extends SubsystemBase {
     rightMotor2.setNeutralMode(NeutralMode.Brake);
     rightMotor3.setNeutralMode(NeutralMode.Brake);
 
-    leftMotor1.configSupplyCurrentLimit(CURRENT_LIMIT);
+    /*leftMotor1.configSupplyCurrentLimit(CURRENT_LIMIT);
     leftMotor2.configSupplyCurrentLimit(CURRENT_LIMIT);
     leftMotor3.configSupplyCurrentLimit(CURRENT_LIMIT);
     rightMotor1.configSupplyCurrentLimit(CURRENT_LIMIT);
     rightMotor2.configSupplyCurrentLimit(CURRENT_LIMIT);
-    rightMotor3.configSupplyCurrentLimit(CURRENT_LIMIT);
+    rightMotor3.configSupplyCurrentLimit(CURRENT_LIMIT);*/
 
     leftMotor1.configOpenloopRamp(RAMP_RATE);
     leftMotor2.configOpenloopRamp(RAMP_RATE);
@@ -95,11 +100,6 @@ public class Drivetrain extends SubsystemBase {
     rightMotor1.configOpenloopRamp(RAMP_RATE);
     rightMotor2.configOpenloopRamp(RAMP_RATE);
     rightMotor3.configOpenloopRamp(RAMP_RATE);
-    
-    leftMotor2.follow(leftMotor1);
-    leftMotor3.follow(leftMotor1);
-    rightMotor2.follow(rightMotor1);
-    rightMotor3.follow(rightMotor1);
 
     leftMotor1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     rightMotor1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);

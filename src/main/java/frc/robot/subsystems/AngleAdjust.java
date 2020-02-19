@@ -6,8 +6,7 @@ import frc.robot.Constants;
 
 public class AngleAdjust extends SubsystemBase {
  
-  private Servo leftServo = new Servo(Constants.SHOOTER_LEFT_SERVO);
-  private Servo rightServo = new Servo(Constants.SHOOTER_RIGHT_SERVO);
+  private Servo servo = new Servo(Constants.ANGLE_ADJUST_SERVO);
 
   public AngleAdjust() {
   }
@@ -23,7 +22,6 @@ public class AngleAdjust extends SubsystemBase {
       position = 0.0;
     }
     
-    leftServo.set(position);
-    rightServo.set(position);
+    servo.set(position);
   }
 }

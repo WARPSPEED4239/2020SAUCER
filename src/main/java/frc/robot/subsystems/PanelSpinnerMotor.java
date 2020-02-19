@@ -8,6 +8,7 @@ import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
@@ -21,7 +22,8 @@ public class PanelSpinnerMotor extends SubsystemBase {
   private ColorSensorV3 mColorSensor = new ColorSensorV3(i2cPort);
   private ColorMatch mColorMatcher = new ColorMatch();
 
-  private String gameDataColor = "Not Set";
+  private String gameData;
+  private String gameDataColor;
 
   private final Color BLUE = ColorMatch.makeColor(0.143, 0.427, 0.429);
   private final Color GREEN = ColorMatch.makeColor(0.197, 0.561, 0.240);
@@ -52,6 +54,26 @@ public class PanelSpinnerMotor extends SubsystemBase {
 
   @Override
   public void periodic() {
+    gameDataColor = DriverStation.getInstance().getGameSpecificMessage();
+    if (gameData.length() > 0) {
+      switch (gameData.charAt(0)) {
+        case 'B':
+          setGameDataColor("Blue");
+          break;
+        case 'G':
+          setGameDataColor("Green");
+          break;
+        case 'R':
+          setGameDataColor("Red");
+          break;
+        case 'Y':
+          setGameDataColor("Yellow");
+          break;
+        default:
+          setGameDataColor("Error");
+          break;
+      }
+    }
   }
 
   public void setPercentOutput(double output) {

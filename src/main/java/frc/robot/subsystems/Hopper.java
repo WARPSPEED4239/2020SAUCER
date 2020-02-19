@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -27,6 +28,9 @@ public class Hopper extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Hopper RPM", getRPM());
+    SmartDashboard.putNumber("Hopper Target RPM", 40.0); //40 RPM for Shooting, 30 RPM for indexing
+    SmartDashboard.putNumber("Hopper Encoder Value", motor.getSelectedSensorPosition());
   }
 
   public void setPercentOutput(double output) {
@@ -39,8 +43,13 @@ public class Hopper extends SubsystemBase {
     motor.set(output);
   }
 
-  public void setVelocity(double RPM) { //TODO Velocity? Position? What is needed if any.
-    int VelocityInSRXUnits = (int) (RPM / 600 * Constants.COUNTS_PER_REVOLUTION_ENCODER);
+  public void setVelocity(double RPM) {
+    int VelocityInSRXUnits = (int) (RPM / 600.0 * Constants.COUNTS_PER_REVOLUTION_ENCODER);
     motor.set(ControlMode.Velocity, VelocityInSRXUnits);
+  }
+
+  public double getRPM() {
+    double RPM = motor.getSelectedSensorVelocity() * 600.0 * Constants.COUNTS_PER_REVOLUTION_ENCODER;
+    return RPM;
   }
 }
