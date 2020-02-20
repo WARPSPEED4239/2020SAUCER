@@ -21,9 +21,9 @@ public class AngleAdjustSetPositionWithJoystick extends CommandBase {
 
   @Override
   public void execute() {
-    double position = (-mJoystick.getThrottle() + 1.0) / 2.0; //1 to -1 --> 0 to 1
+    double mPosition = (-mJoystick.getThrottle() + 1.0) / 2.0; //1 to -1 --> 0 to 1
 
-    mAngleAdjust.setPosition(position);
+    mAngleAdjust.setPosition(mPosition);
   }
 
   @Override

@@ -29,7 +29,7 @@ public class Hopper extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Hopper RPM", getRPM());
-    SmartDashboard.putNumber("Hopper Target RPM", 40.0); //40 RPM for Shooting, 30 RPM for indexing
+    SmartDashboard.putNumber("Hopper Target RPM", 40.0);
     SmartDashboard.putNumber("Hopper Encoder Value", motor.getSelectedSensorPosition());
   }
 

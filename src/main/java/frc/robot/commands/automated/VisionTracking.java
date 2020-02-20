@@ -86,6 +86,7 @@ public class VisionTracking extends CommandBase {
       mAngleAdjust.setPosition(angleAdjustPosition);
     } else {
       double mOutput = mJoystick.getRawAxis(0);
+      double mPosition = (-mJoystick.getThrottle() + 1.0) / 2.0; //1 to -1 --> 0 to 1
 
       if (mTurret.getLeftLimit() && mTurret.getMotorOutputVoltage() > Constants.EPSILON) { //TODO Check direction
         mOutput = 0.0;
@@ -96,13 +97,12 @@ public class VisionTracking extends CommandBase {
       }
 
       mTurret.setPercentOutput(mOutput);
+      mAngleAdjust.setPosition(mPosition);
     }
   }
 
   @Override
   public void end(boolean interrupted) {
-    mLimelight.setCamMode(1);
-    mLimelight.setLEDMode(1);
   }
 
   @Override
