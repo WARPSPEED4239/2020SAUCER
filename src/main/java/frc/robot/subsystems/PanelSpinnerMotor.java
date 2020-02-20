@@ -75,6 +75,8 @@ public class PanelSpinnerMotor extends SubsystemBase {
           break;
       }
     }
+
+    updateDetcectedColor();
   }
 
   public void setPercentOutput(double output) {

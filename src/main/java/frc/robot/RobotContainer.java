@@ -127,7 +127,6 @@ public class RobotContainer {
 		jButton2.whileHeld(new VisionTracking(mAngleAdjust, mLimelight, mTurret, mJoystick));
 
 		jButton3.whileHeld(new IntakeMotorsSetPercentOutput(mIntakeMotors, -1.0));
-		jButton3.whileHeld(new HopperSpinToRPM(mHopper, 30.0));
 
 		jButton4.whileHeld(new IntakeMotorsSetPercentOutput(mIntakeMotors, 1.0));
 

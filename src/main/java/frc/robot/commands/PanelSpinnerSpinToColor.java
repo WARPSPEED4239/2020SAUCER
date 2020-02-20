@@ -19,7 +19,6 @@ public class PanelSpinnerSpinToColor extends CommandBase {
 
   @Override
   public void execute() {
-    mPanelSpinnerMotor.updateDetcectedColor();
     mTargetColor = mPanelSpinnerMotor.getTargetColor();
 
     if (mTargetColor == "Blue" && mPanelSpinnerMotor.getDetectedColorString() != "Red") {

@@ -18,7 +18,7 @@ public class Hopper extends SubsystemBase {
     motor.setInverted(false);
     motor.setNeutralMode(NeutralMode.Brake);
     motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.TIMEOUT_MS);
-    motor.setSensorPhase(false);
+    motor.setSensorPhase(false); //TODO Check this
 
     motor.config_kF(0, 0.0, Constants.TIMEOUT_MS);
     motor.config_kP(0, 0.0, Constants.TIMEOUT_MS);

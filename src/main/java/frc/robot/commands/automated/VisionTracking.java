@@ -85,8 +85,8 @@ public class VisionTracking extends CommandBase {
       mTurret.setPercentOutput(turretMove);
       mAngleAdjust.setPosition(angleAdjustPosition);
     } else {
-      double mOutput = mJoystick.getRawAxis(0);
-      double mPosition = (-mJoystick.getThrottle() + 1.0) / 2.0; //1 to -1 --> 0 to 1
+      double mOutput = mJoystick.getRawAxis(2);
+      double mPosition = (-mJoystick.getRawAxis(3) + 1.0) / 2.0; //1 to -1 --> 0 to 1
 
       if (mTurret.getLeftLimit() && mTurret.getMotorOutputVoltage() > Constants.EPSILON) { //TODO Check direction
         mOutput = 0.0;
