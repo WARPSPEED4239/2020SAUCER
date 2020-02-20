@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -13,6 +14,7 @@ public class AngleAdjust extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Angle Adjust Position", getPosition());
   }
 
   public void setPosition(double position) {
@@ -23,5 +25,9 @@ public class AngleAdjust extends SubsystemBase {
     }
     
     servo.set(position);
+  }
+
+  public double getPosition() {
+    return servo.getPosition();
   }
 }

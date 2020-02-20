@@ -33,16 +33,6 @@ public class DrivetrainArcadeDrive extends CommandBase {
     else if (rotate < -0.85) {
       rotate = -0.85;
     }
-
-    if (mController.getBButton()) {
-      mPneumaticController.turnOnCompressor();
-      mDrivetrain.setHighGear();
-    }
-
-    if (mController.getAButton()) {
-      mPneumaticController.turnOffCompressor();
-      mDrivetrain.setLowGear();
-    }
     
     mDrivetrain.arcadeDrive(move, rotate);
   }

@@ -23,7 +23,8 @@ public class PanelSpinnerMotor extends SubsystemBase {
   private ColorMatch mColorMatcher = new ColorMatch();
 
   private String gameData;
-  private String gameDataColor;
+  private String targetColor;
+  private String detectedColorString;
 
   private final Color BLUE = ColorMatch.makeColor(0.143, 0.427, 0.429);
   private final Color GREEN = ColorMatch.makeColor(0.197, 0.561, 0.240);
@@ -54,23 +55,23 @@ public class PanelSpinnerMotor extends SubsystemBase {
 
   @Override
   public void periodic() {
-    gameDataColor = DriverStation.getInstance().getGameSpecificMessage();
+    gameData = DriverStation.getInstance().getGameSpecificMessage();
     if (gameData.length() > 0) {
       switch (gameData.charAt(0)) {
         case 'B':
-          setGameDataColor("Blue");
+          setTargetColor("Blue");
           break;
         case 'G':
-          setGameDataColor("Green");
+          setTargetColor("Green");
           break;
         case 'R':
-          setGameDataColor("Red");
+          setTargetColor("Red");
           break;
         case 'Y':
-          setGameDataColor("Yellow");
+          setTargetColor("Yellow");
           break;
         default:
-          setGameDataColor("Error");
+          setTargetColor("Error");
           break;
       }
     }
@@ -86,37 +87,57 @@ public class PanelSpinnerMotor extends SubsystemBase {
     motor.set(output);
   }
 
-  public void updateColorSensorData() {
+  public void updateDetcectedColor() {
     Color detectedColor = mColorSensor.getColor();
-
-    String colorString;
     ColorMatchResult match = mColorMatcher.matchClosestColor(detectedColor);
 
     if (match.color == BLUE) {
-      colorString = "Blue";
+      detectedColorString = "Blue";
     } else if (match.color == RED) {
-      colorString = "Red";
+      detectedColorString = "Red";
     } else if (match.color == GREEN) {
-      colorString = "Green";
+      detectedColorString = "Green";
     } else if (match.color == YELLOW) {
-      colorString = "Yellow";
+      detectedColorString = "Yellow";
     } else {
-      colorString = "Unknown";
+      detectedColorString = "Unknown";
     }
 
     SmartDashboard.putNumber("Red Value", detectedColor.red);
     SmartDashboard.putNumber("Green Value", detectedColor.green);
     SmartDashboard.putNumber("Blue Value", detectedColor.blue);
-    SmartDashboard.putString("Detected Color", colorString);
+    SmartDashboard.putString("Detected Color", detectedColorString);
     SmartDashboard.putNumber("Confidence", match.confidence);
   }
 
-  public String setGameDataColor(String color) {
-    return gameDataColor = color;
+  public boolean isGameDataPresent() {
+    boolean isPresent;
+    if (gameData.length() > 0) {
+      isPresent = true;
+    } else {
+      isPresent = false;
+    }
+
+    return isPresent;
+  }
+  public String getDetectedColorString() {
+    return detectedColorString;
   }
 
-  public void setRotations(double rotations) {
+  public String setTargetColor(String color) {
+    return targetColor = color;
+  }
+
+  public String getTargetColor() {
+    return targetColor;
+  }
+
+  public void setSpinnerRotations(double rotations) {
     int rotationsInSRXUntis = (int) (rotations * 32 / 2 * Constants.COUNTS_PER_REVOLUTION_ENCODER);
     motor.set(ControlMode.Position, rotationsInSRXUntis);
+  }
+
+  public void resetEncoder() {
+    motor.setSelectedSensorPosition(0);
   }
 }

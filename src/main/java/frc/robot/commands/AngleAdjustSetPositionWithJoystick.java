@@ -1,16 +1,17 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.AngleAdjust;
 
-public class AngleAdjustSetPosition extends CommandBase {
-  
-  private double mPosition;
+public class AngleAdjustSetPositionWithJoystick extends CommandBase {
+
   private final AngleAdjust mAngleAdjust;
-  
-  public AngleAdjustSetPosition(AngleAdjust angleAdjust, double position) {
+  private Joystick mJoystick;
+
+  public AngleAdjustSetPositionWithJoystick(AngleAdjust angleAdjust, Joystick joystick) {
     mAngleAdjust = angleAdjust;
-    mPosition = position;
+    mJoystick = joystick;
     addRequirements(mAngleAdjust);
   }
 
@@ -20,7 +21,9 @@ public class AngleAdjustSetPosition extends CommandBase {
 
   @Override
   public void execute() {
-    mAngleAdjust.setPosition(mPosition);
+    double position = (-mJoystick.getThrottle() + 1.0) / 2.0; //1 to -1 --> 0 to 1
+
+    mAngleAdjust.setPosition(position);
   }
 
   @Override

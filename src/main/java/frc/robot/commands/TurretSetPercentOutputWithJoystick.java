@@ -5,12 +5,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Turret;
 
-public class TurretSetPercentOutput extends CommandBase {
+public class TurretSetPercentOutputWithJoystick extends CommandBase {
 
   private Joystick mJoystick;
   private final Turret mTurret;
 
-  public TurretSetPercentOutput(Turret turret, Joystick joystick) {
+  public TurretSetPercentOutputWithJoystick(Turret turret, Joystick joystick) {
     mTurret = turret;
     mJoystick = joystick;
     addRequirements(mTurret);

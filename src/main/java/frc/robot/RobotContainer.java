@@ -14,10 +14,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.AngleAdjustSetPosition;
+import frc.robot.commands.AngleAdjustSetPositionWithJoystick;
 import frc.robot.commands.ClimberSetPercentOutput;
 import frc.robot.commands.DrivetrainArcadeDrive;
+import frc.robot.commands.DrivetrainShiftingSetState;
 import frc.robot.commands.FeederWheelsSetPercentOutput;
+import frc.robot.commands.FeederWheelsSpinToRPM;
 import frc.robot.commands.HopperSetPercentOutput;
 import frc.robot.commands.HopperSpinToRPM;
 import frc.robot.commands.IntakeMotorsSetPercentOutput;
@@ -25,13 +27,17 @@ import frc.robot.commands.IntakePistonsSetState;
 import frc.robot.commands.LimelightDriversMode;
 import frc.robot.commands.PanelSpinnerMotorSetPercentOutput;
 import frc.robot.commands.PanelSpinnerPistonSetState;
+import frc.robot.commands.PanelSpinnerSpinForRotations;
+import frc.robot.commands.PanelSpinnerSpinToColor;
 import frc.robot.commands.RampSetState;
 import frc.robot.commands.ShooterSetPercentOutput;
 import frc.robot.commands.ShooterSpinToRPM;
-import frc.robot.commands.TurretSetPercentOutput;
+import frc.robot.commands.TurretSetPercentOutputWithJoystick;
+import frc.robot.commands.automated.VisionTracking;
 import frc.robot.subsystems.AngleAdjust;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DrivetrainShifting;
 import frc.robot.subsystems.FeederWheels;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.IntakeMotors;
@@ -45,13 +51,14 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 
 public class RobotContainer {
-	private XboxController xbox = new XboxController(0);
-	private Joystick joystick = new Joystick(1);
-	private Joystick board = new Joystick(2);
+	private XboxController mXbox = new XboxController(0);
+	private Joystick mJoystick = new Joystick(1);
+	private Joystick mBoard = new Joystick(2);
 
 	private final AngleAdjust mAngleAdjust = new AngleAdjust();
 	private final Climber mClimber = new Climber();
 	private final Drivetrain mDrivetrain = new Drivetrain();
+	private final DrivetrainShifting mDrivetrainShifting = new DrivetrainShifting();
 	private final FeederWheels mFeederWheels = new FeederWheels();
 	private final Hopper mHopper = new Hopper();
 	private final IntakeMotors mIntakeMotors = new IntakeMotors();
@@ -65,9 +72,10 @@ public class RobotContainer {
 	private final Turret mTurret = new Turret();
 
 	public RobotContainer() {
-		CommandScheduler.getInstance().setDefaultCommand(mAngleAdjust, new AngleAdjustSetPosition(mAngleAdjust, 1.0));
+		CommandScheduler.getInstance().setDefaultCommand(mAngleAdjust, new AngleAdjustSetPositionWithJoystick(mAngleAdjust, mJoystick));
 		CommandScheduler.getInstance().setDefaultCommand(mClimber, new ClimberSetPercentOutput(mClimber, mPneumaticController, 0.0));
-		CommandScheduler.getInstance().setDefaultCommand(mDrivetrain, new DrivetrainArcadeDrive(mDrivetrain, mPneumaticController, xbox));
+		CommandScheduler.getInstance().setDefaultCommand(mDrivetrain, new DrivetrainArcadeDrive(mDrivetrain, mPneumaticController, mXbox));
+		CommandScheduler.getInstance().setDefaultCommand(mDrivetrainShifting, new DrivetrainShiftingSetState(mDrivetrainShifting, true));
 		CommandScheduler.getInstance().setDefaultCommand(mFeederWheels, new FeederWheelsSetPercentOutput(mFeederWheels, 0.0));
 		CommandScheduler.getInstance().setDefaultCommand(mHopper, new HopperSetPercentOutput(mHopper, 0.0));
 		CommandScheduler.getInstance().setDefaultCommand(mIntakeMotors, new IntakeMotorsSetPercentOutput(mIntakeMotors, 0.0));
@@ -76,7 +84,7 @@ public class RobotContainer {
 		CommandScheduler.getInstance().setDefaultCommand(mPanelSpinnerMotor, new PanelSpinnerMotorSetPercentOutput(mPanelSpinnerMotor, 0.0));
 		CommandScheduler.getInstance().setDefaultCommand(mPanelSpinnerPiston, new PanelSpinnerPistonSetState(mPanelSpinnerPiston, false));
 		CommandScheduler.getInstance().setDefaultCommand(mShooter, new ShooterSetPercentOutput(mShooter, mPneumaticController, 0.0));
-		CommandScheduler.getInstance().setDefaultCommand(mTurret, new TurretSetPercentOutput(mTurret, joystick));
+		CommandScheduler.getInstance().setDefaultCommand(mTurret, new TurretSetPercentOutputWithJoystick(mTurret, mJoystick));
 		CommandScheduler.getInstance().setDefaultCommand(mRamp, new RampSetState(mRamp, false));
 
 		configureButtonBindings();
@@ -90,61 +98,79 @@ public class RobotContainer {
 		JoystickButton bButton1, bButton2, bButton3, bButton4, bButton5, bButton6, bButton7, bButton8, bButton9,
 				bButton10, bButton11;
 
-		xButtonA = new JoystickButton(xbox, 1);
-		xButtonB = new JoystickButton(xbox, 2);
-		xButtonX = new JoystickButton(xbox, 3);
-		xButtonY = new JoystickButton(xbox, 4);
-		xButtonLeftBumper = new JoystickButton(xbox, 5);
-		xButtonRightBumper = new JoystickButton(xbox, 6);
-		xButtonLeftStick = new JoystickButton(xbox, 9);
-		xButtonRightStick = new JoystickButton(xbox, 10);
+		xButtonA = new JoystickButton(mXbox, 1);
+		xButtonB = new JoystickButton(mXbox, 2);
+		xButtonX = new JoystickButton(mXbox, 3);
+		xButtonY = new JoystickButton(mXbox, 4);
+		xButtonLeftBumper = new JoystickButton(mXbox, 5);
+		xButtonRightBumper = new JoystickButton(mXbox, 6);
+		xButtonLeftStick = new JoystickButton(mXbox, 9);
+		xButtonRightStick = new JoystickButton(mXbox, 10);
 
-		jButton1 = new JoystickButton(joystick, 1);
-		jButton2 = new JoystickButton(joystick, 2);
-		jButton3 = new JoystickButton(joystick, 3);
-		jButton4 = new JoystickButton(joystick, 4);
-		jButton5 = new JoystickButton(joystick, 5);
-		jButton6 = new JoystickButton(joystick, 6);
-		jButton7 = new JoystickButton(joystick, 7);
-		jButton8 = new JoystickButton(joystick, 8);
-		jButton9 = new JoystickButton(joystick, 9);
-		jButton10 = new JoystickButton(joystick, 10);
-		jButton11 = new JoystickButton(joystick, 11);
-		jButton12 = new JoystickButton(joystick, 12);
+		jButton1 = new JoystickButton(mJoystick, 1);
+		jButton2 = new JoystickButton(mJoystick, 2);
+		jButton3 = new JoystickButton(mJoystick, 3);
+		jButton4 = new JoystickButton(mJoystick, 4);
+		jButton5 = new JoystickButton(mJoystick, 5);
+		jButton6 = new JoystickButton(mJoystick, 6);
+		jButton7 = new JoystickButton(mJoystick, 7);
+		jButton8 = new JoystickButton(mJoystick, 8);
+		jButton9 = new JoystickButton(mJoystick, 9);
+		jButton10 = new JoystickButton(mJoystick, 10);
+		jButton11 = new JoystickButton(mJoystick, 11);
+		jButton12 = new JoystickButton(mJoystick, 12);
 
-		bButton1 = new JoystickButton(board, 1);
-		bButton2 = new JoystickButton(board, 2);
-		bButton3 = new JoystickButton(board, 3);
-		bButton4 = new JoystickButton(board, 4);
-		bButton5 = new JoystickButton(board, 5);
-		bButton6 = new JoystickButton(board, 6);
-		bButton7 = new JoystickButton(board, 7);
-		bButton8 = new JoystickButton(board, 8);
-		bButton9 = new JoystickButton(board, 9);
-		bButton10 = new JoystickButton(board, 10);
-		bButton11 = new JoystickButton(board, 11);
+		bButton1 = new JoystickButton(mBoard, 1);
+		bButton2 = new JoystickButton(mBoard, 2);
+		bButton3 = new JoystickButton(mBoard, 3);
+		bButton4 = new JoystickButton(mBoard, 4);
+		bButton5 = new JoystickButton(mBoard, 5);
+		bButton6 = new JoystickButton(mBoard, 6);
+		bButton7 = new JoystickButton(mBoard, 7);
+		bButton8 = new JoystickButton(mBoard, 8);
+		bButton9 = new JoystickButton(mBoard, 9);
+		bButton10 = new JoystickButton(mBoard, 10);
+		bButton11 = new JoystickButton(mBoard, 11);
+
+		xButtonA.whenPressed(new DrivetrainShiftingSetState(mDrivetrainShifting, true));
+		xButtonB.whenPressed(new DrivetrainShiftingSetState(mDrivetrainShifting, false));
 
 		jButton1.whileHeld(new ShooterSpinToRPM(mShooter, mPneumaticController, 4250.0));
-		jButton1.whileHeld(new FeederWheelsSetPercentOutput(mFeederWheels, 0.7));
-		jButton2.whileHeld(new RampSetState(mRamp, true));
+		jButton1.whileHeld(new FeederWheelsSpinToRPM(mFeederWheels, 3000.0));
+
+		jButton2.whileHeld(new VisionTracking(mAngleAdjust, mLimelight, mTurret, mJoystick));
+
 		jButton3.whileHeld(new IntakeMotorsSetPercentOutput(mIntakeMotors, -1.0));
+		jButton3.whileHeld(new HopperSpinToRPM(mHopper, 30.0));
+
 		jButton4.whileHeld(new IntakeMotorsSetPercentOutput(mIntakeMotors, 1.0));
-		jButton5.whenPressed(new IntakePistonsSetState(mIntakePistons, true));
-		jButton6.whenPressed(new IntakePistonsSetState(mIntakePistons, false));
-		jButton7.whileHeld(new HopperSpinToRPM(mHopper, 40.0)); //.3 for indexing
+
+		jButton5.toggleWhenPressed(new IntakePistonsSetState(mIntakePistons, false));
+		jButton6.toggleWhenPressed(new PanelSpinnerPistonSetState(mPanelSpinnerPiston, true));
+
+		jButton7.whileHeld(new HopperSpinToRPM(mHopper, 40.0));
 		jButton8.whileHeld(new HopperSetPercentOutput(mHopper, -1.0));
+
+		jButton9.whileHeld(new ClimberSetPercentOutput(mClimber, mPneumaticController, -1.0)); // CLIMBING
+		jButton9.whenPressed(new DrivetrainShiftingSetState(mDrivetrainShifting, false)); // LOW GEAR
+
+		jButton10.whileHeld(new ClimberSetPercentOutput(mClimber, mPneumaticController, 1.0)); // RAISING
+		jButton10.whileHeld(new DrivetrainShiftingSetState(mDrivetrainShifting, true)); // HIGH GEAR
+
+		jButton11.whenPressed(new PanelSpinnerSpinForRotations(mPanelSpinnerMotor, 3.5));
+		jButton12.whenPressed(new PanelSpinnerSpinToColor(mPanelSpinnerMotor));
 	}
 
 	public XboxController getController() {
-		return xbox;
+		return mXbox;
 	}
 
 	public Joystick getJoystick() {
-		return joystick;
+		return mJoystick;
 	}
 
 	public Joystick getBoard() {
-		return board;
+		return mBoard;
 	}
 
 	public Command getAutonomousCommand() {

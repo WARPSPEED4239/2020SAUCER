@@ -47,7 +47,6 @@ public class Drivetrain extends SubsystemBase {
   private WPI_TalonFX rightMotor2 = new WPI_TalonFX(Constants.DRIVETRAIN_RIGHT_MOTOR_TWO);
   private WPI_TalonFX rightMotor3 = new WPI_TalonFX(Constants.DRIVETRAIN_RIGHT_MOTOR_THREE);
   
-  private DoubleSolenoid shifter = new DoubleSolenoid(Constants.DRIVETRAIN_SHIFTING_SOLENOID_FORWARD, Constants.DRIVETRAIN_SHIFTING_SOLENOID_REVERSE);
   private PigeonIMU IMU = new PigeonIMU(Constants.PIGEON_IMU);
 
   private DifferentialDrive drive = new DifferentialDrive(leftMotor1, rightMotor1);
@@ -124,14 +123,6 @@ public class Drivetrain extends SubsystemBase {
       rotate = 0.0;
     
     drive.arcadeDrive(move, rotate);
-  }
-
-  public void setHighGear() {
-    shifter.set(Value.kForward);
-  }
-
-  public void setLowGear() {
-    shifter.set(Value.kReverse);
   }
 
   public void resetEncoders() {
