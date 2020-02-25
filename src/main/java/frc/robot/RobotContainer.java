@@ -4,24 +4,24 @@ import java.util.Arrays;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AngleAdjustSetPositionWithJoystick;
 import frc.robot.commands.ClimberSetPercentOutput;
 import frc.robot.commands.DrivetrainArcadeDrive;
 import frc.robot.commands.DrivetrainShiftingSetState;
+import frc.robot.commands.ElevatorSetPercentOutput;
 import frc.robot.commands.FeederWheelsSetPercentOutput;
 import frc.robot.commands.FeederWheelsSpinToRPM;
 import frc.robot.commands.HopperSetPercentOutput;
-import frc.robot.commands.HopperSpinToRPM;
 import frc.robot.commands.IntakeMotorsSetPercentOutput;
 import frc.robot.commands.IntakePistonsSetState;
 import frc.robot.commands.LimelightDriversMode;
@@ -29,15 +29,18 @@ import frc.robot.commands.PanelSpinnerMotorSetPercentOutput;
 import frc.robot.commands.PanelSpinnerPistonSetState;
 import frc.robot.commands.PanelSpinnerSpinForRotations;
 import frc.robot.commands.PanelSpinnerSpinToColor;
+import frc.robot.commands.PneumaticControllerCompressorSetState;
 import frc.robot.commands.RampSetState;
 import frc.robot.commands.ShooterSetPercentOutput;
 import frc.robot.commands.ShooterSpinToRPM;
 import frc.robot.commands.TurretSetPercentOutputWithJoystick;
 import frc.robot.commands.automated.VisionTracking;
+import frc.robot.commands.autonomous.DrivetrainFollowTrajectory;
 import frc.robot.subsystems.AngleAdjust;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.DrivetrainShifting;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.FeederWheels;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.IntakeMotors;
@@ -58,6 +61,7 @@ public class RobotContainer {
 	private final Climber mClimber = new Climber();
 	private final Drivetrain mDrivetrain = new Drivetrain();
 	private final DrivetrainShifting mDrivetrainShifting = new DrivetrainShifting();
+	private final Elevator mElevator = new Elevator();
 	private final FeederWheels mFeederWheels = new FeederWheels();
 	private final Hopper mHopper = new Hopper();
 	private final IntakeMotors mIntakeMotors = new IntakeMotors();
@@ -71,20 +75,22 @@ public class RobotContainer {
 	private final Turret mTurret = new Turret();
 
 	public RobotContainer() {
-		CommandScheduler.getInstance().setDefaultCommand(mAngleAdjust, new AngleAdjustSetPositionWithJoystick(mAngleAdjust, mJoystick));
-		CommandScheduler.getInstance().setDefaultCommand(mClimber, new ClimberSetPercentOutput(mClimber, mPneumaticController, 0.0));
-		CommandScheduler.getInstance().setDefaultCommand(mDrivetrain, new DrivetrainArcadeDrive(mDrivetrain, mPneumaticController, mXbox));
-		CommandScheduler.getInstance().setDefaultCommand(mDrivetrainShifting, new DrivetrainShiftingSetState(mDrivetrainShifting, true));
-		CommandScheduler.getInstance().setDefaultCommand(mFeederWheels, new FeederWheelsSetPercentOutput(mFeederWheels, 0.0));
-		CommandScheduler.getInstance().setDefaultCommand(mHopper, new HopperSetPercentOutput(mHopper, 0.0));
-		CommandScheduler.getInstance().setDefaultCommand(mIntakeMotors, new IntakeMotorsSetPercentOutput(mIntakeMotors, 0.0));
-		CommandScheduler.getInstance().setDefaultCommand(mIntakePistons, new IntakePistonsSetState(mIntakePistons, true));
-		CommandScheduler.getInstance().setDefaultCommand(mLimelight, new LimelightDriversMode(mLimelight));
-		CommandScheduler.getInstance().setDefaultCommand(mPanelSpinnerMotor, new PanelSpinnerMotorSetPercentOutput(mPanelSpinnerMotor, 0.0));
-		CommandScheduler.getInstance().setDefaultCommand(mPanelSpinnerPiston, new PanelSpinnerPistonSetState(mPanelSpinnerPiston, false));
-		CommandScheduler.getInstance().setDefaultCommand(mShooter, new ShooterSetPercentOutput(mShooter, mPneumaticController, 0.0));
-		CommandScheduler.getInstance().setDefaultCommand(mTurret, new TurretSetPercentOutputWithJoystick(mTurret, mJoystick));
-		CommandScheduler.getInstance().setDefaultCommand(mRamp, new RampSetState(mRamp, false));
+		mAngleAdjust.setDefaultCommand(new AngleAdjustSetPositionWithJoystick(mAngleAdjust, mJoystick));
+		mClimber.setDefaultCommand(new ClimberSetPercentOutput(mClimber, 0.0));
+		mDrivetrain.setDefaultCommand(new DrivetrainArcadeDrive(mDrivetrain, mXbox));
+		mDrivetrainShifting.setDefaultCommand(new DrivetrainShiftingSetState(mDrivetrainShifting, true));
+		mElevator.setDefaultCommand(new ElevatorSetPercentOutput(mElevator, 0.0));
+		mFeederWheels.setDefaultCommand(new FeederWheelsSetPercentOutput(mFeederWheels, 0.0));
+		mHopper.setDefaultCommand(new HopperSetPercentOutput(mHopper, 0.0));
+		mIntakeMotors.setDefaultCommand(new IntakeMotorsSetPercentOutput(mIntakeMotors, 0.0));
+		mIntakePistons.setDefaultCommand(new IntakePistonsSetState(mIntakePistons, true));
+		mLimelight.setDefaultCommand(new LimelightDriversMode(mLimelight));
+		mPanelSpinnerMotor.setDefaultCommand(new PanelSpinnerMotorSetPercentOutput(mPanelSpinnerMotor, 0.0));
+		mPanelSpinnerPiston.setDefaultCommand(new PanelSpinnerPistonSetState(mPanelSpinnerPiston, false));
+		mPneumaticController.setDefaultCommand(new PneumaticControllerCompressorSetState(mPneumaticController, true));
+		mShooter.setDefaultCommand(new ShooterSetPercentOutput(mShooter, 0.0));
+		mTurret.setDefaultCommand(new TurretSetPercentOutputWithJoystick(mTurret, mJoystick));
+		mRamp.setDefaultCommand(new RampSetState(mRamp, false));
 
 		configureButtonBindings();
 	}
@@ -120,9 +126,11 @@ public class RobotContainer {
 		xButtonA.whenPressed(new DrivetrainShiftingSetState(mDrivetrainShifting, true));
 		xButtonB.whenPressed(new DrivetrainShiftingSetState(mDrivetrainShifting, false));
 
-		//jButton1.whileHeld(new ShootingRoutine(mFeederWheels, mHopper, mRamp, mShooter, 3000.0, 40.0, 4250.0));
-		jButton1.whileHeld(new ShooterSpinToRPM(mShooter, mPneumaticController, 4250.0));
+		// jButton1.whileHeld(new ShootingRoutine(mFeederWheels, mHopper, mRamp,
+		// mShooter, 3000.0, 40.0, 4250.0));
+		jButton1.whileHeld(new ShooterSpinToRPM(mShooter, 4250.0));
 		jButton1.whileHeld(new FeederWheelsSpinToRPM(mFeederWheels, 3000.0));
+		jButton1.whileHeld(new PneumaticControllerCompressorSetState(mPneumaticController, false));
 
 		jButton2.whileHeld(new VisionTracking(mAngleAdjust, mLimelight, mTurret, mJoystick));
 
@@ -136,11 +144,11 @@ public class RobotContainer {
 		jButton7.whileHeld(new HopperSetPercentOutput(mHopper, 0.3));
 		jButton8.whileHeld(new HopperSetPercentOutput(mHopper, -1.0));
 
-		jButton9.whileHeld(new ClimberSetPercentOutput(mClimber, mPneumaticController, -1.0)); //CLIMBING
-		jButton9.whenPressed(new DrivetrainShiftingSetState(mDrivetrainShifting, false)); //LOW GEAR
+		jButton9.whileHeld(new ClimberSetPercentOutput(mClimber, -1.0));
+		jButton9.whileHeld(new PneumaticControllerCompressorSetState(mPneumaticController, false));
 
-		jButton10.whileHeld(new ClimberSetPercentOutput(mClimber, mPneumaticController, 1.0)); //RAISING
-		jButton10.whileHeld(new DrivetrainShiftingSetState(mDrivetrainShifting, true)); //HIGH GEAR
+		jButton10.whileHeld(new ElevatorSetPercentOutput(mElevator, 1.0)); //TODO Elevator on POV?
+		jButton10.whileHeld(new PneumaticControllerCompressorSetState(mPneumaticController, true));
 
 		jButton11.whenPressed(new PanelSpinnerSpinForRotations(mPanelSpinnerMotor, 3.5));
 		jButton12.whenPressed(new PanelSpinnerSpinToColor(mPanelSpinnerMotor));
@@ -155,21 +163,24 @@ public class RobotContainer {
 	}
 
 	public Command getAutonomousCommand() {
-		TrajectoryConfig config = new TrajectoryConfig(mDrivetrain.getMaxVelocityMetersPerSecond(),
-				mDrivetrain.getMaxAcellMetersPerSecondPerSecond()); // TODO this will have to be reworked into it's
-																	// seperate file like in 2018 and selected auto
-																	// command will come from a Sendable Chooser
+		mDrivetrain.resetSensorsAndOdemetry();
+		var voltageConstraint = new DifferentialDriveVoltageConstraint(mDrivetrain.getFeedForward(), mDrivetrain.getKinematics(), 9.0);
+
+		TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(6.0), Units.feetToMeters(3.0))
+			.setKinematics(mDrivetrain.getKinematics())
+			.addConstraint(voltageConstraint);
 
 		config.setKinematics(mDrivetrain.getKinematics());
 
-		Trajectory trajectory = TrajectoryGenerator
-				.generateTrajectory(Arrays.asList(new Pose2d(), new Pose2d(1.0, 0, new Rotation2d())), config);
-
-		RamseteCommand command = new RamseteCommand(trajectory, mDrivetrain::getPose, new RamseteController(2.0, 0.7),
-				mDrivetrain.getFeedForward(), mDrivetrain.getKinematics(), mDrivetrain::getSpeeds,
-				mDrivetrain.getLeftPIDController(), mDrivetrain.getRightPIDController(), mDrivetrain::setOutput,
-				mDrivetrain);
-
-		return command;
+		Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+			new Pose2d(), 
+			Arrays.asList(
+			  new Translation2d(1.6555, -0.557)
+			), 
+			new Pose2d(2.0, -2.0, Rotation2d.fromDegrees(-90.0)), 
+			config
+		  );
+		
+		return new DrivetrainFollowTrajectory(mDrivetrain, trajectory);
 	}
 }

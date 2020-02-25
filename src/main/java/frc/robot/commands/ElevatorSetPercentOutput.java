@@ -1,17 +1,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Elevator;
 
-public class ShooterSetPercentOutput extends CommandBase {
+public class ElevatorSetPercentOutput extends CommandBase {
 
   private double mOutput;
-  private final Shooter mShooter;
+  private final Elevator mElevator;
 
-  public ShooterSetPercentOutput(Shooter shooter, double output) {
-    mShooter = shooter;
+  public ElevatorSetPercentOutput(Elevator elevator, double output) {
+    mElevator = elevator;
     mOutput = output;
-    addRequirements(mShooter);
+    addRequirements(mElevator);
   }
 
   @Override
@@ -20,7 +20,7 @@ public class ShooterSetPercentOutput extends CommandBase {
 
   @Override
   public void execute() {
-    mShooter.setPercentOutput(mOutput);
+    mElevator.setPercentOutput(mOutput);
   }
 
   @Override

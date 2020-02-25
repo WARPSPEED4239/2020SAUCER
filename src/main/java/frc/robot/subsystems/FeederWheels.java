@@ -25,7 +25,7 @@ public class FeederWheels extends SubsystemBase {
     motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.TIMEOUT_MS);
     motor.setSensorPhase(true);
 
-    motor.config_kF(0, 0.0, Constants.TIMEOUT_MS);
+    motor.config_kF(0, 0.5, Constants.TIMEOUT_MS);
     motor.config_kP(0, 0.0, Constants.TIMEOUT_MS);
 		motor.config_kI(0, 0.0, Constants.TIMEOUT_MS);
 		motor.config_kD(0, 0.0, Constants.TIMEOUT_MS);

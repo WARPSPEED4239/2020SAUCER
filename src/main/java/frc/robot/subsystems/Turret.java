@@ -18,6 +18,9 @@ public class Turret extends SubsystemBase {
     motor.configFactoryDefault();
     motor.setInverted(false);
     motor.setNeutralMode(NeutralMode.Brake);
+
+    motor.configVoltageCompSaturation(12.0);
+    motor.enableVoltageCompensation(true);
   }
 
   @Override

@@ -2,10 +2,10 @@ package frc.robot.commands.autonomous;
 
 public class SendableChoosers {
     public static enum StartingPosition {
-		OpponetTrenchPara, OpponetTrenchPerp, LeftPara, LeftPerp, CenterPara, CenterPerp, RightPara, RightPerp, TrenchPara, TrenchPerp
+		OpponetTrenchPerp, LeftPerp, CenterPerp, CenterPara, RightPerp, RightPara, TrenchPerp
     }
     
     public static enum TargetTask {
-        DriveForward, DriveForwardNoSensors
+        Shoot3, Steal2Shoot5, Shoot3Grab5Shoot5, Shoot3Grab3Shoot3, DriveForward, DriveForwardNoSensors
     }
 }

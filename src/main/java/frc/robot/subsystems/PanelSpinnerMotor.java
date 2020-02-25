@@ -45,7 +45,10 @@ public class PanelSpinnerMotor extends SubsystemBase {
     motor.config_kF(0, 0.0, Constants.TIMEOUT_MS);
     motor.config_kP(0, 0.0, Constants.TIMEOUT_MS);
 		motor.config_kI(0, 0.0, Constants.TIMEOUT_MS);
-		motor.config_kD(0, 0.0, Constants.TIMEOUT_MS);
+    motor.config_kD(0, 0.0, Constants.TIMEOUT_MS);
+    
+    motor.configVoltageCompSaturation(12.0);
+    motor.enableVoltageCompensation(true);
 
     mColorMatcher.addColorMatch(BLUE);
     mColorMatcher.addColorMatch(GREEN);

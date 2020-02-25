@@ -1,25 +1,21 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.PneumaticController;
 import frc.robot.subsystems.Shooter;
 
 public class ShooterSpinToRPM extends CommandBase {
   
   private double mRPM;
   private final Shooter mShooter;
-  private final PneumaticController mPneumaticController;
   
-  public ShooterSpinToRPM(Shooter shooter, PneumaticController pneumaticController, double RPM) {
+  public ShooterSpinToRPM(Shooter shooter, double RPM) {
     mShooter = shooter;
-    mPneumaticController = pneumaticController;
     mRPM = RPM;
-    addRequirements(mShooter, mPneumaticController);
+    addRequirements(mShooter);
   }
 
   @Override
   public void initialize() {
-    mPneumaticController.turnOffCompressor();
   }
 
   @Override
@@ -29,7 +25,6 @@ public class ShooterSpinToRPM extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    mPneumaticController.turnOnCompressor();
   }
 
   @Override

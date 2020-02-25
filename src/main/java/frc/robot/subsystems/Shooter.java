@@ -46,6 +46,9 @@ public class Shooter extends SubsystemBase {
     motor1.config_kP(0, 0.0, Constants.TIMEOUT_MS);
 		motor1.config_kI(0, 0.0, Constants.TIMEOUT_MS);
     motor1.config_kD(0, 0.0, Constants.TIMEOUT_MS);
+
+    motor1.configVoltageCompSaturation(12.0);
+    motor1.enableVoltageCompensation(true);
   }
 
   @Override
@@ -53,6 +56,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter RMP", getRPM());
     SmartDashboard.putNumber("Shooter Target RPM", 4250.0); //TODO Find out what RPM we want
     SmartDashboard.putNumber("Shooter Encoder Value", motor1.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Shooter PERCENT", motor1.getMotorOutputVoltage());
   }
 
   public void setPercentOutput(double output) {

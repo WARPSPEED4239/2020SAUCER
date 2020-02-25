@@ -21,12 +21,14 @@ public class PneumaticController extends SubsystemBase {
   public void periodic() {
   }
 
-  public void turnOffCompressor() {
-    mCompressor.stop();
-  }
+  public void setCompressorState(boolean on) {
+    boolean mOn = on;
 
-  public void turnOnCompressor() {
-    mCompressor.start();
+    if (mOn) {
+      mCompressor.start();
+    } else {
+      mCompressor.stop();
+    }
   }
 
   public boolean getCompressorStatus() {

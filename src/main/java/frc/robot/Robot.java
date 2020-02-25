@@ -4,8 +4,10 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.autonomous.AutonomousCommand;
 import frc.robot.commands.autonomous.SendableChoosers.StartingPosition;
 import frc.robot.commands.autonomous.SendableChoosers.TargetTask;
 
@@ -26,15 +28,21 @@ public class Robot extends TimedRobot {
     cam0.setFPS(10);
 
     positionChooser.setDefaultOption("Opponet Trench Perp", StartingPosition.OpponetTrenchPerp);
-    positionChooser.addOption("Opponet Trench Para", StartingPosition.OpponetTrenchPara);
     positionChooser.addOption("Left Perp", StartingPosition.LeftPerp);
-    positionChooser.addOption("Left Para", StartingPosition.LeftPara);
     positionChooser.addOption("Center Perp", StartingPosition.CenterPerp);
     positionChooser.addOption("Center Para", StartingPosition.CenterPara);
     positionChooser.addOption("Right Perp", StartingPosition.RightPerp);
     positionChooser.addOption("Right Para", StartingPosition.RightPara);
     positionChooser.addOption("Trench Perp", StartingPosition.TrenchPerp);
-    positionChooser.addOption("Trench Para", StartingPosition.TrenchPara);
+    SmartDashboard.putData(positionChooser);
+
+    targetChooser.setDefaultOption("Shoot 3", TargetTask.Shoot3);
+    targetChooser.addOption("Steal 2 Shoot 5", TargetTask.Steal2Shoot5);
+    targetChooser.addOption("Shoot 3 Grab 5 Shoot 5", TargetTask.Shoot3Grab5Shoot5);
+    targetChooser.addOption("Shoot 3 Grab 3 Shoot 3", TargetTask.Shoot3Grab3Shoot3);
+    targetChooser.addOption("Drive Forward", TargetTask.DriveForward);
+    targetChooser.addOption("Drive Forward No Sensors", TargetTask.DriveForwardNoSensors);
+    SmartDashboard.putData(targetChooser);
   }
 
   @Override
@@ -52,7 +60,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    mAutonomousCommand = mRobotContainer.getAutonomousCommand();
+    StartingPosition startingPosition = positionChooser.getSelected();
+		TargetTask targetTask = targetChooser.getSelected();
+    
+    mAutonomousCommand = new AutonomousCommand(startingPosition, targetTask);
+    
+    //mAutonomousCommand = mRobotContainer.getAutonomousCommand();
 
     if (mAutonomousCommand != null) {
       mAutonomousCommand.schedule();
