@@ -3,9 +3,9 @@ package frc.robot.commands.autonomous;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.autonomous.SendableChoosers.TargetTask;
 
-public class CommandOpponetTrenchPerp extends SequentialCommandGroup {
+public class CommandCenter extends SequentialCommandGroup {
 
-  public CommandOpponetTrenchPerp(TargetTask targetTask) {
+  public CommandCenter(TargetTask targetTask) {
     // super(new FooCommand(), new BarCommand());
     super();
   }

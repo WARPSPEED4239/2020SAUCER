@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.autonomous.AutonomousCommand;
+import frc.robot.commands.autonomous.Trajectories;
 import frc.robot.commands.autonomous.SendableChoosers.StartingPosition;
 import frc.robot.commands.autonomous.SendableChoosers.TargetTask;
 
@@ -22,18 +23,17 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() { 
     mRobotContainer = new RobotContainer();
+    mRobotContainer.configureButtonBindings();
 
     UsbCamera cam0 = CameraServer.getInstance().startAutomaticCapture(0);
 		cam0.setResolution(320, 240);
     cam0.setFPS(10);
 
-    positionChooser.setDefaultOption("Opponet Trench Perp", StartingPosition.OpponetTrenchPerp);
-    positionChooser.addOption("Left Perp", StartingPosition.LeftPerp);
-    positionChooser.addOption("Center Perp", StartingPosition.CenterPerp);
-    positionChooser.addOption("Center Para", StartingPosition.CenterPara);
-    positionChooser.addOption("Right Perp", StartingPosition.RightPerp);
-    positionChooser.addOption("Right Para", StartingPosition.RightPara);
-    positionChooser.addOption("Trench Perp", StartingPosition.TrenchPerp);
+    Trajectories.initialize();
+
+    positionChooser.addOption("Left", StartingPosition.LeftPerp);
+    positionChooser.addOption("Center", StartingPosition.CenterPerp);
+    positionChooser.addOption("Right", StartingPosition.RightPerp);
     SmartDashboard.putData(positionChooser);
 
     targetChooser.setDefaultOption("Shoot 3", TargetTask.Shoot3);
@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
     targetChooser.addOption("Shoot 3 Grab 5 Shoot 5", TargetTask.Shoot3Grab5Shoot5);
     targetChooser.addOption("Shoot 3 Grab 3 Shoot 3", TargetTask.Shoot3Grab3Shoot3);
     targetChooser.addOption("Drive Forward", TargetTask.DriveForward);
-    targetChooser.addOption("Drive Forward No Sensors", TargetTask.DriveForwardNoSensors);
+    targetChooser.addOption("Do Nothing", TargetTask.DoNothing);
     SmartDashboard.putData(targetChooser);
   }
 
@@ -65,8 +65,6 @@ public class Robot extends TimedRobot {
     
     mAutonomousCommand = new AutonomousCommand(startingPosition, targetTask);
     
-    //mAutonomousCommand = mRobotContainer.getAutonomousCommand();
-
     if (mAutonomousCommand != null) {
       mAutonomousCommand.schedule();
     }

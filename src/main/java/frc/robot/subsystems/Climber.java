@@ -10,7 +10,7 @@ import frc.robot.Constants;
 public class Climber extends SubsystemBase {
   private final int CURRENT_LIMIT = 30;
 
-  private CANSparkMax motor = new CANSparkMax(Constants.CLIMBER_MOTOR, MotorType.kBrushless);
+  private CANSparkMax motor = new CANSparkMax(Constants.CLIMBER_MOTOR, MotorType.kBrushed);
   
   public Climber() {
     motor.restoreFactoryDefaults();

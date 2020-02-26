@@ -19,8 +19,8 @@ public final class Constants {
 
                             CLIMBER_MOTOR = 1;                //PDP #X //SparkMAX //NEO
 
-                                public static final int ANGLE_ADJUST_SERVO = 0,           //PWM
-        
+    public static final int ANGLE_ADJUST_SERVO = 0,           //PWM
+    
                             TURRET_LEFT_LIMIT = 0,            //DIO
                             TURRET_RIGHT_LIMIT = 1,
 

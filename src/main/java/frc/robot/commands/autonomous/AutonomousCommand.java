@@ -12,13 +12,13 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
     switch (startingPosition) {
       case OpponetTrenchPerp:
-        addCommands(new CommandOpponetTrenchPerp(targetTask));
+        addCommands(new CommandLeft(targetTask));
         break;
       case LeftPerp:
-        addCommands(new CommandLeftPerp(targetTask));
+        addCommands(new CommandRight(targetTask));
         break;
       case CenterPerp:
-        addCommands(new CommandCenterPerp(targetTask));
+        addCommands(new CommandCenter(targetTask));
         break;
       case CenterPara:
         addCommands(new CommandCenterPara(targetTask));

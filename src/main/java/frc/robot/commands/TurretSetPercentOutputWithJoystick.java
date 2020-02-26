@@ -24,7 +24,7 @@ public class TurretSetPercentOutputWithJoystick extends CommandBase {
   public void execute() {
     double mOutput = mJoystick.getRawAxis(2);
 
-    if (mTurret.getLeftLimit() && mTurret.getMotorOutputVoltage() > Constants.EPSILON) { //TODO Check direction
+    if (mTurret.getLeftLimit() && mTurret.getMotorOutputVoltage() > Constants.EPSILON) {
       mTurret.setPercentOutput(0.0);
     } else if (mTurret.getRightLimit() && mTurret.getMotorOutputVoltage() < -Constants.EPSILON) {
       mTurret.setPercentOutput(0.0);
