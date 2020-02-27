@@ -2,6 +2,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AngleAdjustSetPositionWithJoystick;
 import frc.robot.commands.ClimberSetPercentOutput;
@@ -24,6 +27,7 @@ import frc.robot.commands.ShooterSetPercentOutput;
 import frc.robot.commands.ShooterSpinToRPM;
 import frc.robot.commands.TurretSetPercentOutputWithJoystick;
 import frc.robot.commands.automated.VisionTracking;
+import frc.robot.commands.autonomous.Trajectories;
 import frc.robot.subsystems.AngleAdjust;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
@@ -79,13 +83,20 @@ public class RobotContainer {
 		mShooter.setDefaultCommand(new ShooterSetPercentOutput(mShooter, 0.0));
 		mTurret.setDefaultCommand(new TurretSetPercentOutputWithJoystick(mTurret, mJoystick));
 		mRamp.setDefaultCommand(new RampSetState(mRamp, false));
+
+		configureButtonBindings();
+
+		var voltageConstraint = new DifferentialDriveVoltageConstraint(mDrivetrain.getFeedForward(), mDrivetrain.getKinematics(), 9.0);
+		TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(6.0), Units.feetToMeters(3.0)).setKinematics(mDrivetrain.getKinematics()).addConstraint(voltageConstraint);
+		config.setKinematics(mDrivetrain.getKinematics());
+      	Trajectories.initialize(config);
 	}
 
-	public void configureButtonBindings() {
+	private void configureButtonBindings() {
 		JoystickButton xButtonA, xButtonB, xButtonX, xButtonY, xButtonLeftBumper, xButtonRightBumper, xButtonLeftStick,
 				xButtonRightStick;
 		JoystickButton jButton1, jButton2, jButton3, jButton4, jButton5, jButton6, jButton7, jButton8, jButton9,
-				jButton10, jButton11, jButton12, jPOVUp, jPOVDown;
+				jButton10, jButton11, jButton12;
 
 		xButtonA = new JoystickButton(mXbox, 1);
 		xButtonB = new JoystickButton(mXbox, 2);
@@ -108,8 +119,6 @@ public class RobotContainer {
 		jButton10 = new JoystickButton(mJoystick, 10);
 		jButton11 = new JoystickButton(mJoystick, 11);
 		jButton12 = new JoystickButton(mJoystick, 12);
-		jPOVUp = new JoystickButton(mJoystick, mJoystick.getPOV(0));
-		jPOVDown = new JoystickButton(mJoystick, mJoystick.getPOV(180));
 
 		xButtonA.whenPressed(new DrivetrainShiftingSetState(mDrivetrainShifting, true));
 		xButtonB.whenPressed(new DrivetrainShiftingSetState(mDrivetrainShifting, false));
@@ -134,10 +143,6 @@ public class RobotContainer {
 
 		jButton9.whileHeld(new ClimberSetPercentOutput(mClimber, -1.0));
 		jButton9.whileHeld(new PneumaticControllerCompressorSetState(mPneumaticController, false));
-
-		jPOVUp.whileHeld(new ElevatorSetPercentOutput(mElevator, 0.5));
-		jPOVUp.whileHeld(new PneumaticControllerCompressorSetState(mPneumaticController, false));
-		jPOVDown.whileHeld(new ElevatorSetPercentOutput(mElevator, -0.5));
 
 		jButton11.whenPressed(new PanelSpinnerSpinForRotations(mPanelSpinnerMotor, 3.5));
 		jButton12.whenPressed(new PanelSpinnerSpinToColor(mPanelSpinnerMotor));

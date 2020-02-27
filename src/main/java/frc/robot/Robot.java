@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.autonomous.AutonomousCommand;
-import frc.robot.commands.autonomous.Trajectories;
 import frc.robot.commands.autonomous.SendableChoosers.StartingPosition;
 import frc.robot.commands.autonomous.SendableChoosers.TargetTask;
 
@@ -23,15 +22,12 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() { 
     mRobotContainer = new RobotContainer();
-    mRobotContainer.configureButtonBindings();
 
     UsbCamera cam0 = CameraServer.getInstance().startAutomaticCapture(0);
 		cam0.setResolution(320, 240);
     cam0.setFPS(10);
 
-    Trajectories.initialize();
-
-    positionChooser.addOption("Left", StartingPosition.LeftPerp);
+    positionChooser.setDefaultOption("Left", StartingPosition.LeftPerp);
     positionChooser.addOption("Center", StartingPosition.CenterPerp);
     positionChooser.addOption("Right", StartingPosition.RightPerp);
     SmartDashboard.putData(positionChooser);

@@ -4,30 +4,23 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.autonomous.SendableChoosers.StartingPosition;
 import frc.robot.commands.autonomous.SendableChoosers.TargetTask;
+import frc.robot.subsystems.Drivetrain;
 
 public class AutonomousCommand extends SequentialCommandGroup {
 
-  public AutonomousCommand(StartingPosition startingPosition, TargetTask targetTask) {
+  public AutonomousCommand(StartingPosition startingPosition, TargetTask targetTask, Drivetrain drivetrain) {
     super();
 
     switch (startingPosition) {
       case OpponetTrenchPerp:
-        addCommands(new CommandLeft(targetTask));
+        addCommands(new CommandLeft(targetTask, drivetrain));
         break;
       case LeftPerp:
-        addCommands(new CommandRight(targetTask));
+        addCommands(new CommandRight(targetTask, drivetrain));
         break;
       case CenterPerp:
-        addCommands(new CommandCenter(targetTask));
+        addCommands(new CommandCenter(targetTask, drivetrain));
         break;
-      case CenterPara:
-        addCommands(new CommandCenterPara(targetTask));
-        break;
-      case RightPerp:
-        addCommands(new CommandRightPerp(targetTask));
-        break;
-      case RightPara:
-        addCommands(new CommandRightPara(targetTask));
       default:
         addCommands(new WaitCommand(15.0));
         break;

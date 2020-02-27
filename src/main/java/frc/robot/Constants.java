@@ -11,11 +11,12 @@ public final class Constants {
                             ELEVATOR_MOTOR = 2,               //PDP #X //TalonSRX //775Pro
                             FEEDER_WHEELS_MOTOR = 7,          //PDP #4 ENCODER //775Pro
                             HOPPER_MOTOR = 6,                 //PDP #X ENCODER //775Pro
-                            INTAKE_MOTORS = 1,                //PDP #X //Bags
                             PANNEL_SPINNER_MOTOR = 3,         //PDP #X ENCODER //Bag
                             SHOOTER_MOTOR_TOP = 5,            //PDP #X ENCODER //Redline
                             SHOOTER_MOTOR_BOTTOM = 1,         //PDP #X //Redline
                             TURRET_MOTOR = 4,                 //PDP #X //Bag
+
+                            INTAKE_MOTORS = 1,                //PDP #X //Bags //SPX
 
                             CLIMBER_MOTOR = 1;                //PDP #X //SparkMAX //NEO
 

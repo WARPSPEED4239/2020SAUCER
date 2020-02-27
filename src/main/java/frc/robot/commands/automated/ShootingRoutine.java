@@ -34,7 +34,6 @@ public class ShootingRoutine extends CommandBase {
   @Override
   public void execute() {
     mFeederWheels.setVelocity(mFeederWheelsRPM);
-    mHopper.setVelocity(mHopperRPM);
     mShooter.setVelocity(mShooterRPM);
 
     if (mFeederWheels.getRPM() < mFeederWheelsRPM + 20.0 && mFeederWheels.getRPM() > mFeederWheelsRPM - 20.0 && mShooter.getRPM() < mShooterRPM + 20.0 && mShooter.getRPM() > mShooterRPM - 20.0) {
