@@ -2,9 +2,12 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.util.Units;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AngleAdjustSetPositionWithJoystick;
 import frc.robot.commands.ClimberSetPercentOutput;
@@ -27,6 +30,9 @@ import frc.robot.commands.ShooterSetPercentOutput;
 import frc.robot.commands.ShooterSpinToRPM;
 import frc.robot.commands.TurretSetPercentOutputWithJoystick;
 import frc.robot.commands.automated.VisionTracking;
+import frc.robot.commands.autonomous.SendableChoosers.StartingPosition;
+import frc.robot.commands.autonomous.SendableChoosers.TargetTask;
+import frc.robot.commands.autonomous.AutonomousCommand;
 import frc.robot.commands.autonomous.Trajectories;
 import frc.robot.subsystems.AngleAdjust;
 import frc.robot.subsystems.Climber;
@@ -66,6 +72,9 @@ public class RobotContainer {
 	private final Shooter mShooter = new Shooter();
 	private final Turret mTurret = new Turret();
 
+  	private SendableChooser<StartingPosition> positionChooser = new SendableChooser<>();
+  	private SendableChooser<TargetTask> targetChooser = new SendableChooser<>();
+
 	public RobotContainer() {
 		mAngleAdjust.setDefaultCommand(new AngleAdjustSetPositionWithJoystick(mAngleAdjust, mJoystick));
 		mClimber.setDefaultCommand(new ClimberSetPercentOutput(mClimber, 0.0));
@@ -85,6 +94,19 @@ public class RobotContainer {
 		mRamp.setDefaultCommand(new RampSetState(mRamp, false));
 
 		configureButtonBindings();
+
+		positionChooser.setDefaultOption("Left", StartingPosition.LeftPerp);
+   	 	positionChooser.addOption("Center", StartingPosition.CenterPerp);
+    	positionChooser.addOption("Right", StartingPosition.RightPerp);
+    	SmartDashboard.putData(positionChooser);
+
+    	targetChooser.setDefaultOption("Shoot 3", TargetTask.Shoot3);
+    	targetChooser.addOption("Steal 2 Shoot 5", TargetTask.Steal2Shoot5);
+    	targetChooser.addOption("Shoot 3 Grab 5 Shoot 5", TargetTask.Shoot3Grab5Shoot5);
+    	targetChooser.addOption("Shoot 3 Grab 3 Shoot 3", TargetTask.Shoot3Grab3Shoot3);
+    	targetChooser.addOption("Drive Forward", TargetTask.DriveForward);
+    	targetChooser.addOption("Do Nothing", TargetTask.DoNothing);
+    	SmartDashboard.putData(targetChooser);
 
 		var voltageConstraint = new DifferentialDriveVoltageConstraint(mDrivetrain.getFeedForward(), mDrivetrain.getKinematics(), 9.0);
 		TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(6.0), Units.feetToMeters(3.0)).setKinematics(mDrivetrain.getKinematics()).addConstraint(voltageConstraint);
@@ -154,5 +176,12 @@ public class RobotContainer {
 
 	public Joystick getJoystick() {
 		return mJoystick;
+	}
+
+	public Command getAutonomousCommand() {
+		StartingPosition startingPosition = positionChooser.getSelected();
+		TargetTask targetTask = targetChooser.getSelected();
+
+		return new AutonomousCommand(startingPosition, targetTask, mDrivetrain);
 	}
 }

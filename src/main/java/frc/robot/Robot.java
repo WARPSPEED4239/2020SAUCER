@@ -13,10 +13,6 @@ import frc.robot.commands.autonomous.SendableChoosers.TargetTask;
 
 public class Robot extends TimedRobot {
   private Command mAutonomousCommand;
-
-  private SendableChooser<StartingPosition> positionChooser = new SendableChooser<>();
-  private SendableChooser<TargetTask> targetChooser = new SendableChooser<>();
-  
   private RobotContainer mRobotContainer;
 
   @Override
@@ -26,19 +22,6 @@ public class Robot extends TimedRobot {
     UsbCamera cam0 = CameraServer.getInstance().startAutomaticCapture(0);
 		cam0.setResolution(320, 240);
     cam0.setFPS(10);
-
-    positionChooser.setDefaultOption("Left", StartingPosition.LeftPerp);
-    positionChooser.addOption("Center", StartingPosition.CenterPerp);
-    positionChooser.addOption("Right", StartingPosition.RightPerp);
-    SmartDashboard.putData(positionChooser);
-
-    targetChooser.setDefaultOption("Shoot 3", TargetTask.Shoot3);
-    targetChooser.addOption("Steal 2 Shoot 5", TargetTask.Steal2Shoot5);
-    targetChooser.addOption("Shoot 3 Grab 5 Shoot 5", TargetTask.Shoot3Grab5Shoot5);
-    targetChooser.addOption("Shoot 3 Grab 3 Shoot 3", TargetTask.Shoot3Grab3Shoot3);
-    targetChooser.addOption("Drive Forward", TargetTask.DriveForward);
-    targetChooser.addOption("Do Nothing", TargetTask.DoNothing);
-    SmartDashboard.putData(targetChooser);
   }
 
   @Override
@@ -56,10 +39,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    StartingPosition startingPosition = positionChooser.getSelected();
-		TargetTask targetTask = targetChooser.getSelected();
-    
-    mAutonomousCommand = new AutonomousCommand(startingPosition, targetTask);
+    mAutonomousCommand = mRobotContainer.getAutonomousCommand();
     
     if (mAutonomousCommand != null) {
       mAutonomousCommand.schedule();
