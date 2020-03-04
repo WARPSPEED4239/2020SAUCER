@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class FeederWheels extends SubsystemBase {
-  private final double RAMP_RATE = 0.2;
+  private final double RAMP_RATE = 0.3;
   private final SupplyCurrentLimitConfiguration CURRENT_LIMIT = new SupplyCurrentLimitConfiguration (true, 30.0, 40.0, 1.0);
   
   private WPI_TalonSRX motor = new WPI_TalonSRX(Constants.FEEDER_WHEELS_MOTOR);
@@ -25,7 +25,7 @@ public class FeederWheels extends SubsystemBase {
     motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.TIMEOUT_MS);
     motor.setSensorPhase(true);
 
-    motor.config_kF(0, 0.5, Constants.TIMEOUT_MS);
+    motor.config_kF(0, 0.01, Constants.TIMEOUT_MS);
     motor.config_kP(0, 0.0, Constants.TIMEOUT_MS);
 		motor.config_kI(0, 0.0, Constants.TIMEOUT_MS);
 		motor.config_kD(0, 0.0, Constants.TIMEOUT_MS);
@@ -54,7 +54,7 @@ public class FeederWheels extends SubsystemBase {
   }
 
   public double getRPM() {
-    double RPM = motor.getSelectedSensorVelocity() * 600.0 * Constants.COUNTS_PER_REVOLUTION_ENCODER;
+    double RPM = motor.getSelectedSensorVelocity() * 600.0 / Constants.COUNTS_PER_REVOLUTION_ENCODER;
     return RPM;
   }
 }

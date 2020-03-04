@@ -46,7 +46,7 @@ public class VisionTracking extends CommandBase {
       double ty = mLimelight.getTy();
       double distanceToGoal = ((kHeightOfInnerGoalInches - kHeightOfLimelightInches) / (Math.tan(Units.degreesToRadians(kAngleOfLimelightDegrees + ty)))); 
 
-      if (distanceToGoal < 348.0 && distanceToGoal >= 319.0) { //TODO tune these
+      /*if (distanceToGoal < 348.0 && distanceToGoal >= 319.0) { //TODO tune these
         angleAdjustPosition = 0.45;
       } else if (distanceToGoal < 290.0 && distanceToGoal >= 261.0) {
         angleAdjustPosition = 0.5;
@@ -70,7 +70,7 @@ public class VisionTracking extends CommandBase {
         angleAdjustPosition = 0.95;
       } else {
         angleAdjustPosition = 1.0;
-      }
+      }*/
 
       if (mTurret.getLeftLimit() && mTurret.getMotorOutputVoltage() > Constants.EPSILON) { //TODO Check direction
         turretMove = 0.0;
@@ -83,7 +83,7 @@ public class VisionTracking extends CommandBase {
       }
 
       mTurret.setPercentOutput(turretMove);
-      mAngleAdjust.setPosition(angleAdjustPosition);
+      //mAngleAdjust.setPosition(angleAdjustPosition);
     } else {
       double mOutput = mJoystick.getRawAxis(2);
       double mPosition = (-mJoystick.getRawAxis(3) + 1.0) / 2.0; //1 to -1 --> 0 to 1

@@ -52,7 +52,7 @@ public class Hopper extends SubsystemBase {
   }
 
   public double getRPM() {
-    double RPM = motor.getSelectedSensorVelocity() * 600.0 * Constants.COUNTS_PER_REVOLUTION_ENCODER;
+    double RPM = motor.getSelectedSensorVelocity() * 600.0 / Constants.COUNTS_PER_REVOLUTION_ENCODER;
     return RPM;
   }
 }

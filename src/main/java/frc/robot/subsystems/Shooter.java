@@ -15,8 +15,8 @@ public class Shooter extends SubsystemBase {
   private final double RAMP_RATE = 0.2;
   private final SupplyCurrentLimitConfiguration CURRENT_LIMIT = new SupplyCurrentLimitConfiguration (true, 40.0, 60.0, 1.0);
 
-  private WPI_TalonSRX motor1 = new WPI_TalonSRX(Constants.SHOOTER_MOTOR_BOTTOM);
-  private WPI_TalonSRX motor2 = new WPI_TalonSRX(Constants.SHOOTER_MOTOR_TOP);
+  private WPI_TalonSRX motor1 = new WPI_TalonSRX(Constants.SHOOTER_MOTOR_TOP);
+  private WPI_TalonSRX motor2 = new WPI_TalonSRX(Constants.SHOOTER_MOTOR_BOTTOM);
 
   public Shooter() {
     motor1.configFactoryDefault();
@@ -56,7 +56,6 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter RMP", getRPM());
     SmartDashboard.putNumber("Shooter Target RPM", 4250.0); //TODO Find out what RPM we want
     SmartDashboard.putNumber("Shooter Encoder Value", motor1.getSelectedSensorPosition());
-    SmartDashboard.putNumber("Shooter PERCENT", motor1.getMotorOutputVoltage());
   }
 
   public void setPercentOutput(double output) {
@@ -75,7 +74,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getRPM() {
-    double RPM = motor1.getSelectedSensorVelocity() * 600.0 * Constants.COUNTS_PER_REVOLUTION_ENCODER;
+    double RPM = motor1.getSelectedSensorVelocity() * 600.0 / Constants.COUNTS_PER_REVOLUTION_ENCODER;
     return RPM;
   }
 }

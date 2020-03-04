@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -15,24 +17,21 @@ import frc.robot.commands.DrivetrainArcadeDrive;
 import frc.robot.commands.DrivetrainShiftingSetState;
 import frc.robot.commands.ElevatorSetPercentOutput;
 import frc.robot.commands.FeederWheelsSetPercentOutput;
-import frc.robot.commands.FeederWheelsSpinToRPM;
 import frc.robot.commands.HopperSetPercentOutput;
 import frc.robot.commands.IntakeMotorsSetPercentOutput;
 import frc.robot.commands.IntakePistonsSetState;
 import frc.robot.commands.LimelightDriversMode;
 import frc.robot.commands.PanelSpinnerMotorSetPercentOutput;
 import frc.robot.commands.PanelSpinnerPistonSetState;
-import frc.robot.commands.PanelSpinnerSpinForRotations;
 import frc.robot.commands.PanelSpinnerSpinToColor;
 import frc.robot.commands.PneumaticControllerCompressorSetState;
 import frc.robot.commands.RampSetState;
 import frc.robot.commands.ShooterSetPercentOutput;
-import frc.robot.commands.ShooterSpinToRPM;
 import frc.robot.commands.TurretSetPercentOutputWithJoystick;
 import frc.robot.commands.automated.VisionTracking;
+import frc.robot.commands.autonomous.AutonomousCommand;
 import frc.robot.commands.autonomous.SendableChoosers.StartingPosition;
 import frc.robot.commands.autonomous.SendableChoosers.TargetTask;
-import frc.robot.commands.autonomous.AutonomousCommand;
 import frc.robot.commands.autonomous.Trajectories;
 import frc.robot.subsystems.AngleAdjust;
 import frc.robot.subsystems.Climber;
@@ -80,11 +79,11 @@ public class RobotContainer {
 		mClimber.setDefaultCommand(new ClimberSetPercentOutput(mClimber, 0.0));
 		mDrivetrain.setDefaultCommand(new DrivetrainArcadeDrive(mDrivetrain, mXbox));
 		mDrivetrainShifting.setDefaultCommand(new DrivetrainShiftingSetState(mDrivetrainShifting, true));
-		mElevator.setDefaultCommand(new ElevatorSetPercentOutput(mElevator, 0.0));
+		mElevator.setDefaultCommand(new ElevatorSetPercentOutput(mElevator, mJoystick));
 		mFeederWheels.setDefaultCommand(new FeederWheelsSetPercentOutput(mFeederWheels, 0.0));
 		mHopper.setDefaultCommand(new HopperSetPercentOutput(mHopper, 0.0));
 		mIntakeMotors.setDefaultCommand(new IntakeMotorsSetPercentOutput(mIntakeMotors, 0.0));
-		mIntakePistons.setDefaultCommand(new IntakePistonsSetState(mIntakePistons, true));
+		mIntakePistons.setDefaultCommand(new IntakePistonsSetState(mIntakePistons, false));
 		mLimelight.setDefaultCommand(new LimelightDriversMode(mLimelight));
 		mPanelSpinnerMotor.setDefaultCommand(new PanelSpinnerMotorSetPercentOutput(mPanelSpinnerMotor, 0.0));
 		mPanelSpinnerPiston.setDefaultCommand(new PanelSpinnerPistonSetState(mPanelSpinnerPiston, false));
@@ -95,18 +94,22 @@ public class RobotContainer {
 
 		configureButtonBindings();
 
-		positionChooser.setDefaultOption("Left", StartingPosition.LeftPerp);
-   	 	positionChooser.addOption("Center", StartingPosition.CenterPerp);
-    	positionChooser.addOption("Right", StartingPosition.RightPerp);
+		positionChooser.setDefaultOption("Left", StartingPosition.Left);
+   	 	positionChooser.addOption("Center", StartingPosition.Center);
+    	positionChooser.addOption("Right", StartingPosition.Right);
     	SmartDashboard.putData(positionChooser);
 
-    	targetChooser.setDefaultOption("Shoot 3", TargetTask.Shoot3);
+		targetChooser.setDefaultOption("Drive Forward", TargetTask.DriveForward);
+    	targetChooser.addOption("Shoot 3", TargetTask.Shoot3);
     	targetChooser.addOption("Steal 2 Shoot 5", TargetTask.Steal2Shoot5);
     	targetChooser.addOption("Shoot 3 Grab 5 Shoot 5", TargetTask.Shoot3Grab5Shoot5);
     	targetChooser.addOption("Shoot 3 Grab 3 Shoot 3", TargetTask.Shoot3Grab3Shoot3);
-    	targetChooser.addOption("Drive Forward", TargetTask.DriveForward);
     	targetChooser.addOption("Do Nothing", TargetTask.DoNothing);
-    	SmartDashboard.putData(targetChooser);
+		SmartDashboard.putData(targetChooser);
+		
+		UsbCamera cam0 = CameraServer.getInstance().startAutomaticCapture(0);
+		cam0.setResolution(320, 240);
+    	cam0.setFPS(10);
 
 		var voltageConstraint = new DifferentialDriveVoltageConstraint(mDrivetrain.getFeedForward(), mDrivetrain.getKinematics(), 9.0);
 		TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(6.0), Units.feetToMeters(3.0)).setKinematics(mDrivetrain.getKinematics()).addConstraint(voltageConstraint);
@@ -142,13 +145,12 @@ public class RobotContainer {
 		jButton11 = new JoystickButton(mJoystick, 11);
 		jButton12 = new JoystickButton(mJoystick, 12);
 
-		xButtonA.whenPressed(new DrivetrainShiftingSetState(mDrivetrainShifting, true));
-		xButtonB.whenPressed(new DrivetrainShiftingSetState(mDrivetrainShifting, false));
+		xButtonA.whenPressed(new DrivetrainShiftingSetState(mDrivetrainShifting, false));
+		xButtonB.whenPressed(new DrivetrainShiftingSetState(mDrivetrainShifting, true));
 
-		// jButton1.whileHeld(new ShootingRoutine(mFeederWheels, mHopper, mRamp,
-		// mShooter, 3000.0, 40.0, 4250.0));
-		jButton1.whileHeld(new ShooterSpinToRPM(mShooter, 4250.0));
-		jButton1.whileHeld(new FeederWheelsSpinToRPM(mFeederWheels, 3000.0));
+		//jButton1.whileHeld(new ShootingRoutine(mFeederWheels, mHopper, mRamp, mShooter, 3000.0, 40.0, 4250.0));
+		jButton1.whileHeld(new ShooterSetPercentOutput(mShooter, 0.8));
+		jButton1.whileHeld(new FeederWheelsSetPercentOutput(mFeederWheels, 0.75));
 		jButton1.whileHeld(new PneumaticControllerCompressorSetState(mPneumaticController, false));
 
 		jButton2.whileHeld(new VisionTracking(mAngleAdjust, mLimelight, mTurret, mJoystick));
@@ -157,16 +159,17 @@ public class RobotContainer {
 
 		jButton4.whileHeld(new IntakeMotorsSetPercentOutput(mIntakeMotors, 1.0));
 
-		jButton5.toggleWhenPressed(new IntakePistonsSetState(mIntakePistons, false));
+		jButton5.toggleWhenPressed(new IntakePistonsSetState(mIntakePistons, true));
 		jButton6.toggleWhenPressed(new PanelSpinnerPistonSetState(mPanelSpinnerPiston, true));
 
-		jButton7.whileHeld(new HopperSetPercentOutput(mHopper, 0.3));
+		jButton7.whileHeld(new HopperSetPercentOutput(mHopper, 0.7));
 		jButton8.whileHeld(new HopperSetPercentOutput(mHopper, -1.0));
 
 		jButton9.whileHeld(new ClimberSetPercentOutput(mClimber, -1.0));
 		jButton9.whileHeld(new PneumaticControllerCompressorSetState(mPneumaticController, false));
 
-		jButton11.whenPressed(new PanelSpinnerSpinForRotations(mPanelSpinnerMotor, 3.5));
+		jButton10.whileHeld(new RampSetState(mRamp, true));
+		jButton11.whileHeld(new PanelSpinnerMotorSetPercentOutput(mPanelSpinnerMotor, 0.85));
 		jButton12.whenPressed(new PanelSpinnerSpinToColor(mPanelSpinnerMotor));
 	}
 
@@ -182,6 +185,6 @@ public class RobotContainer {
 		StartingPosition startingPosition = positionChooser.getSelected();
 		TargetTask targetTask = targetChooser.getSelected();
 
-		return new AutonomousCommand(startingPosition, targetTask, mDrivetrain);
+		return new AutonomousCommand(startingPosition, targetTask, mJoystick, mAngleAdjust, mDrivetrain, mFeederWheels, mHopper, mIntakeMotors, mIntakePistons, mLimelight, mPneumaticController, mRamp, mShooter, mTurret);
 	}
 }

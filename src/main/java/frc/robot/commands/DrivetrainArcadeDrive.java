@@ -33,9 +33,6 @@ public class DrivetrainArcadeDrive extends CommandBase {
     }
     
     mDrivetrain.arcadeDrive(move, rotate);
-
-    SmartDashboard.putNumber("Move", move);
-    SmartDashboard.putNumber("Rotate", rotate);
   }
 
   @Override

@@ -138,8 +138,13 @@ public class PanelSpinnerMotor extends SubsystemBase {
   }
 
   public void setSpinnerRotations(double rotations) {
-    int rotationsInSRXUntis = (int) (rotations * 32 / 2 * Constants.COUNTS_PER_REVOLUTION_ENCODER);
+    int rotationsInSRXUntis = (int) (rotations * 32.0 / 2.0 * Constants.COUNTS_PER_REVOLUTION_ENCODER);
     motor.set(ControlMode.Position, rotationsInSRXUntis);
+  }
+
+  public double getSpinnerRotations() {
+    double spinnerRotations = motor.getSelectedSensorPosition() / 32.0 * 2.0 / Constants.COUNTS_PER_REVOLUTION_ENCODER;
+    return spinnerRotations;
   }
 
   public void resetEncoder() {

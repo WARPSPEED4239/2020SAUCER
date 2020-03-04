@@ -1,16 +1,17 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Elevator;
 
 public class ElevatorSetPercentOutput extends CommandBase {
 
-  private double mOutput;
+  private Joystick mJoystick;
   private final Elevator mElevator;
 
-  public ElevatorSetPercentOutput(Elevator elevator, double output) {
+  public ElevatorSetPercentOutput(Elevator elevator, Joystick joystick) {
     mElevator = elevator;
-    mOutput = output;
+    mJoystick = joystick;
     addRequirements(mElevator);
   }
 
@@ -20,7 +21,15 @@ public class ElevatorSetPercentOutput extends CommandBase {
 
   @Override
   public void execute() {
-    mElevator.setPercentOutput(mOutput);
+    double mValue = mJoystick.getPOV(0);
+
+    if (mValue == 0) {
+      mElevator.setPercentOutput(0.5);
+    } else if (mValue == 180) {
+      mElevator.setPercentOutput(-0.5);
+    } else {
+        mElevator.setPercentOutput(0.0);
+      }
   }
 
   @Override

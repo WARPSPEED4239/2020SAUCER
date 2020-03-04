@@ -36,7 +36,7 @@ public class ShootingRoutine extends CommandBase {
     mFeederWheels.setVelocity(mFeederWheelsRPM);
     mShooter.setVelocity(mShooterRPM);
 
-    if (mFeederWheels.getRPM() < mFeederWheelsRPM + 20.0 && mFeederWheels.getRPM() > mFeederWheelsRPM - 20.0 && mShooter.getRPM() < mShooterRPM + 20.0 && mShooter.getRPM() > mShooterRPM - 20.0) {
+    if (mFeederWheels.getRPM() < mFeederWheelsRPM + 20.0 && mFeederWheels.getRPM() > mFeederWheelsRPM - 20.0 /*&& mShooter.getRPM() < mShooterRPM + 20.0 && mShooter.getRPM() > mShooterRPM - 20.0*/) {
       mHopper.setVelocity(mHopperRPM);
       mRamp.setPistonState(true);
     } else {

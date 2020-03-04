@@ -12,8 +12,8 @@ public final class Constants {
                             FEEDER_WHEELS_MOTOR = 7,          //PDP #4 ENCODER //775Pro
                             HOPPER_MOTOR = 6,                 //PDP #X ENCODER //775Pro
                             PANNEL_SPINNER_MOTOR = 3,         //PDP #X ENCODER //Bag
-                            SHOOTER_MOTOR_TOP = 5,            //PDP #X ENCODER //Redline
-                            SHOOTER_MOTOR_BOTTOM = 1,         //PDP #X //Redline
+                            SHOOTER_MOTOR_TOP = 1,            //PDP #X ENCODER //Redline
+                            SHOOTER_MOTOR_BOTTOM = 5,         //PDP #X //Redline
                             TURRET_MOTOR = 4,                 //PDP #X //Bag
 
                             INTAKE_MOTORS = 1,                //PDP #X //Bags //SPX
@@ -29,10 +29,10 @@ public final class Constants {
 
                             PIGEON_IMU = 1;                   //Pigeon IMU
     
-    public static final int DRIVETRAIN_SHIFTING_SOLENOID_FORWARD = 4, //PCM
-                            DRIVETRAIN_SHIFTING_SOLENOID_REVERSE = 5,
-                            INTAKE_SOLENOID_FORWARD = 6,
-                            INTAKE_SOLENOID_REVERSE = 7,
+    public static final int DRIVETRAIN_SHIFTING_SOLENOID_FORWARD = 5, //PCM
+                            DRIVETRAIN_SHIFTING_SOLENOID_REVERSE = 4,
+                            INTAKE_SOLENOID_FORWARD = 7,
+                            INTAKE_SOLENOID_REVERSE = 6,
                             PANNEL_SPINNER_SOLENOID_FORWARD = 0,
                             PANNEL_SPINNER_SOLENOID_REVERSE = 1,
                             RAMP_SOLENOID_FORWARD = 2,
@@ -43,5 +43,8 @@ public final class Constants {
     public static final int TIMEOUT_MS = 30,
                             COUNTS_PER_REVOLUTION_ENCODER = 4096;
                            
-    public static final double EPSILON = 0.0001;
+    public static final double EPSILON = 0.0001,
+                               FEEDER_WHEELS_RPM = 3000.0,
+                               HOPPER_RPM = 40.0,
+                               SHOOTER_RPM = 4250.0;
 }
