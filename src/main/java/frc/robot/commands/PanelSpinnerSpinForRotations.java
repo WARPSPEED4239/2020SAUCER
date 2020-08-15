@@ -16,12 +16,14 @@ public class PanelSpinnerSpinForRotations extends CommandBase {
 
   @Override
   public void initialize() {
-    mPanelSpinnerMotor.resetEncoder();
+    mPanelSpinnerMotor.resetCounter();
+    mPanelSpinnerMotor.setStartingColorString(mPanelSpinnerMotor.getDetectedColorString());
   }
 
   @Override
   public void execute() {
-    mPanelSpinnerMotor.setSpinnerRotations(mRotations); //3 to 5 rotations needed
+
+    //write logic here
   }
 
   @Override

@@ -3,7 +3,7 @@ package frc.robot;
 public final class Constants {
     public static final int SHOOTER_MOTOR_TOP = 1,            //PDP #X //TalonSRX ENCODER Redline
                             FEEDER_WHEELS_MOTOR = 2,          //PDP #4 ENCODER 775Pro
-                            PANNEL_SPINNER_MOTOR = 3,         //PDP #X ENCODER Bag
+                            PANNEL_SPINNER_MOTOR = 3,         //PDP #X Bag
                             TURRET_MOTOR = 4,                 //PDP #X Bag
                             SHOOTER_MOTOR_BOTTOM = 5,         //PDP #X Redline
                             HOPPER_MOTOR = 6,                 //PDP #X ENCODER 775Pro
