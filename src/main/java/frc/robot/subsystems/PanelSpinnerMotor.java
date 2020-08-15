@@ -20,9 +20,12 @@ public class PanelSpinnerMotor extends SubsystemBase { //TODO MAKE ROTATION CONT
   private ColorSensorV3 mColorSensor = new ColorSensorV3(i2cPort);
   private ColorMatch mColorMatcher = new ColorMatch();
 
+  private double counter = 0;
+
   private String gameData;
   private String targetColor;
   private String detectedColorString;
+  private String startingColorString;
 
   private final Color BLUE = ColorMatch.makeColor(0.143, 0.427, 0.429);
   private final Color GREEN = ColorMatch.makeColor(0.197, 0.561, 0.240);
@@ -75,16 +78,6 @@ public class PanelSpinnerMotor extends SubsystemBase { //TODO MAKE ROTATION CONT
     updateDetcectedColor();
   }
 
-  public void setPercentOutput(double output) {
-    if (output > 1.0) {
-      output = 1.0;
-    } else if (output < -1.0) {
-      output = -1.0;
-    }
-
-    motor.set(output);
-  }
-
   public void updateDetcectedColor() {
     Color detectedColor = mColorSensor.getColor();
     ColorMatchResult match = mColorMatcher.matchClosestColor(detectedColor);
@@ -118,6 +111,33 @@ public class PanelSpinnerMotor extends SubsystemBase { //TODO MAKE ROTATION CONT
 
     return isPresent;
   }
+
+  public void setPercentOutput(double output) {
+    if (output > 1.0) {
+      output = 1.0;
+    } else if (output < -1.0) {
+      output = -1.0;
+    }
+
+    motor.set(output);
+  }
+
+  public double resetCounter() {
+    return counter = 0;
+  }
+
+  public double getCounter() {
+    return counter;
+  }
+
+  public String getStartingColorString() {
+    return startingColorString;
+  }
+
+  public String setStartingColorString(String color) {
+    return startingColorString = color;
+  }
+
   public String getDetectedColorString() {
     return detectedColorString;
   }
