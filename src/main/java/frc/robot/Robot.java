@@ -5,15 +5,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
-
-  private RobotContainer m_robotContainer;
+  private Command mAutonomousCommand;
+  private RobotContainer mRobotContainer;
 
   @Override
-  public void robotInit() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
+  public void robotInit() { 
+    mRobotContainer = new RobotContainer();
   }
 
   @Override
@@ -31,10 +28,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+    mAutonomousCommand = mRobotContainer.getAutonomousCommand();
+    
+    if (mAutonomousCommand != null) {
+      mAutonomousCommand.schedule();
     }
   }
 
@@ -44,8 +41,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
+    if (mAutonomousCommand != null) {
+      mAutonomousCommand.cancel();
     }
   }
 
