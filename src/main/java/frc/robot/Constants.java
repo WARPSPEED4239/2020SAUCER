@@ -1,24 +1,22 @@
 package frc.robot;
 
 public final class Constants {
-    public static final int DRIVETRAIN_LEFT_MOTOR_ONE = 9,    //PDP #0 //TalonFX
-                            DRIVETRAIN_LEFT_MOTOR_TWO = 10,    //PDP #1
-                            DRIVETRAIN_LEFT_MOTOR_THREE = 11,  //PDP #2
-                            DRIVETRAIN_RIGHT_MOTOR_ONE = 12,   //PDP #15
-                            DRIVETRAIN_RIGHT_MOTOR_TWO = 13,   //PDP #14
-                            DRIVETRAIN_RIGHT_MOTOR_THREE = 14, //PDP #13
-                            
-                            ELEVATOR_MOTOR = 2,               //PDP #X //TalonSRX //775Pro
-                            FEEDER_WHEELS_MOTOR = 7,          //PDP #4 ENCODER //775Pro
-                            HOPPER_MOTOR = 6,                 //PDP #X ENCODER //775Pro
-                            PANNEL_SPINNER_MOTOR = 3,         //PDP #X ENCODER //Bag
-                            SHOOTER_MOTOR_TOP = 1,            //PDP #X ENCODER //Redline
-                            SHOOTER_MOTOR_BOTTOM = 5,         //PDP #X //Redline
-                            TURRET_MOTOR = 4,                 //PDP #X //Bag
+    public static final int SHOOTER_MOTOR_TOP = 1,            //PDP #X //TalonSRX ENCODER Redline
+                            FEEDER_WHEELS_MOTOR = 2,          //PDP #4 ENCODER 775Pro
+                            PANNEL_SPINNER_MOTOR = 3,         //PDP #X Bag
+                            TURRET_MOTOR = 4,                 //PDP #X Bag
+                            SHOOTER_MOTOR_BOTTOM = 5,         //PDP #X Redline
+                            HOPPER_MOTOR = 6,                 //PDP #X ENCODER 775Pro
+                            ELEVATOR_MOTOR = 7,               //PDP #X 775Pro
+                            INTAKE_MOTORS = 8,                //PDP #X Bags
+                            CLIMBER_MOTOR = 9,                //PDP #X 775Pro
 
-                            INTAKE_MOTORS = 1,                //PDP #X //Bags //SPX
-
-                            CLIMBER_MOTOR = 1;                //PDP #X //SparkMAX //NEO
+                            DRIVETRAIN_LEFT_MOTOR_ONE = 10,    //PDP #0 //TalonFX
+                            DRIVETRAIN_LEFT_MOTOR_TWO = 11,    //PDP #1
+                            DRIVETRAIN_LEFT_MOTOR_THREE = 12,  //PDP #2
+                            DRIVETRAIN_RIGHT_MOTOR_ONE = 13,   //PDP #15
+                            DRIVETRAIN_RIGHT_MOTOR_TWO = 14,   //PDP #14
+                            DRIVETRAIN_RIGHT_MOTOR_THREE = 15; //PDP #13
 
     public static final int ANGLE_ADJUST_SERVO = 0,           //PWM
     

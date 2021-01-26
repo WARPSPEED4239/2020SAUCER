@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.ColorMatch;
@@ -15,16 +13,19 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class PanelSpinnerMotor extends SubsystemBase {
+public class PanelSpinnerMotor extends SubsystemBase { //TODO MAKE ROTATION CONTROL OFF OF COLOR SENSOR
 
   private WPI_TalonSRX motor = new WPI_TalonSRX(Constants.PANNEL_SPINNER_MOTOR);
   private I2C.Port i2cPort = I2C.Port.kOnboard;
   private ColorSensorV3 mColorSensor = new ColorSensorV3(i2cPort);
   private ColorMatch mColorMatcher = new ColorMatch();
 
+  private double counter = 0;
+
   private String gameData;
   private String targetColor;
   private String detectedColorString;
+  private String startingColorString;
 
   private final Color BLUE = ColorMatch.makeColor(0.143, 0.427, 0.429);
   private final Color GREEN = ColorMatch.makeColor(0.197, 0.561, 0.240);
@@ -34,18 +35,13 @@ public class PanelSpinnerMotor extends SubsystemBase {
   public PanelSpinnerMotor() {
     motor.configFactoryDefault();
     motor.setInverted(false);
-    motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.TIMEOUT_MS);
-    motor.setSensorPhase(false);
     motor.setNeutralMode(NeutralMode.Brake);
 
     motor.configPeakOutputForward(0.9);
     motor.configPeakOutputReverse(-0.9);
-    motor.configClosedLoopPeakOutput(0, 0.9);
 
-    motor.config_kF(0, 0.0, Constants.TIMEOUT_MS);
-    motor.config_kP(0, 0.0, Constants.TIMEOUT_MS);
-		motor.config_kI(0, 0.0, Constants.TIMEOUT_MS);
-    motor.config_kD(0, 0.0, Constants.TIMEOUT_MS);
+    motor.configVoltageCompSaturation(12.0);
+    motor.enableVoltageCompensation(true);
     
     motor.configVoltageCompSaturation(12.0);
     motor.enableVoltageCompensation(true);
@@ -82,16 +78,6 @@ public class PanelSpinnerMotor extends SubsystemBase {
     updateDetcectedColor();
   }
 
-  public void setPercentOutput(double output) {
-    if (output > 1.0) {
-      output = 1.0;
-    } else if (output < -1.0) {
-      output = -1.0;
-    }
-
-    motor.set(output);
-  }
-
   public void updateDetcectedColor() {
     Color detectedColor = mColorSensor.getColor();
     ColorMatchResult match = mColorMatcher.matchClosestColor(detectedColor);
@@ -125,6 +111,33 @@ public class PanelSpinnerMotor extends SubsystemBase {
 
     return isPresent;
   }
+
+  public void setPercentOutput(double output) {
+    if (output > 1.0) {
+      output = 1.0;
+    } else if (output < -1.0) {
+      output = -1.0;
+    }
+
+    motor.set(output);
+  }
+
+  public double resetCounter() {
+    return counter = 0;
+  }
+
+  public double getCounter() {
+    return counter;
+  }
+
+  public String getStartingColorString() {
+    return startingColorString;
+  }
+
+  public String setStartingColorString(String color) {
+    return startingColorString = color;
+  }
+
   public String getDetectedColorString() {
     return detectedColorString;
   }
@@ -135,19 +148,5 @@ public class PanelSpinnerMotor extends SubsystemBase {
 
   public String getTargetColor() {
     return targetColor;
-  }
-
-  public void setSpinnerRotations(double rotations) {
-    int rotationsInSRXUntis = (int) (rotations * 32.0 / 2.0 * Constants.COUNTS_PER_REVOLUTION_ENCODER);
-    motor.set(ControlMode.Position, rotationsInSRXUntis);
-  }
-
-  public double getSpinnerRotations() {
-    double spinnerRotations = motor.getSelectedSensorPosition() / 32.0 * 2.0 / Constants.COUNTS_PER_REVOLUTION_ENCODER;
-    return spinnerRotations;
-  }
-
-  public void resetEncoder() {
-    motor.setSelectedSensorPosition(0);
   }
 }

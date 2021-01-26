@@ -14,6 +14,8 @@ public class IntakeMotors extends SubsystemBase {
     motors.configFactoryDefault();
     motors.setInverted(false);
     motors.setNeutralMode(NeutralMode.Brake);
+    motors.configVoltageCompSaturation(12.0);
+    motors.enableVoltageCompensation(true);
   }
 
   @Override
